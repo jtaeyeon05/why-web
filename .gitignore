@@ -1,0 +1,64 @@
+# macOS
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+*.log
+*.tmp
+
+# VSCode
+.vscode/
+.history/
+misc.xml
+deploymentTargetDropDown.xml
+render.experimental.xml
+.history
+.ionide
+*.code-workspace
+*.vsix
+
+# IntelliJ
+captures/
+build/
+out/
+.cxx/
+.externalNativeBuild/
+.idea/
+.idea_modules/
+.gradle/
+.navigation/
+local.properties
+output.json
+!gradle/wrapper/gradle-wrapper.jar
+*.iml
+*.ipr
+*.iws
+*.apk
+
+# Code
+.kotlin
+.gradle
+.externalNativeBuild
+captures
+.idea_modules/
+.gradle/
+.navigation/
+local.properties
+output.json
+!gradle/wrapper/gradle-wrapper.jar
+*.iml
+*.ipr
+*.iws
+*.apk
+
+# Code
+.kotlin
+.gradle
+.externalNativeBuild
+captures
+**/build/
+xcuserdata
+**/build/
+xcuserdata
+!src/**/build/
+node_modules/
