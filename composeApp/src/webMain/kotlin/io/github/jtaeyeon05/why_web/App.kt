@@ -2,14 +2,15 @@ package io.github.jtaeyeon05.why_web
 
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.HoverInteraction
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -18,11 +19,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
+import io.github.jtaeyeon05.why_web.buildinfo.BuildInfo
+import io.github.jtaeyeon05.why_web.ui.AppTheme
+import io.github.jtaeyeon05.why_web.ui.rememberLayoutConstraints
+import io.github.jtaeyeon05.why_web.util.openTabInNewTab
 import kotlinx.coroutines.delay
 
 
@@ -71,7 +79,7 @@ fun App() {
                                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                                     append("[ ")
                                 }
-                                append("👩‍🚀")
+                                append("🧞")
                                 withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                                     append(" ?? ]")
                                 }
@@ -188,6 +196,35 @@ fun App() {
                             fontSize = typography.mediumFontSize.sp,
                             lineHeight = typography.lineHeight.em,
                         )
+                    }
+
+                    // IdentifierBox
+                    var isIdentifierBoxTapped by rememberSaveable { mutableStateOf(false) }
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopStart)
+                            .size(box.buttonHeight)
+                            .pointerInput(Unit) {
+                                detectTapGestures {
+                                    isIdentifierBoxTapped = !isIdentifierBoxTapped
+                                }
+                            },
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        if (isIdentifierBoxTapped) {
+                            BasicText(
+                                text = "${BuildInfo.VERSION}\n${BuildInfo.BUILD_NUMBER}",
+                                style = LocalTextStyle.current.copy(
+                                    color = LocalContentColor.current,
+                                    textAlign = TextAlign.Center,
+                                    lineHeight = typography.lineHeight.em,
+                                ),
+                                autoSize = TextAutoSize.StepBased(
+                                    minFontSize = 0.1f.sp,
+                                    maxFontSize = 100.0f.sp,
+                                )
+                            )
+                        }
                     }
                 }
             }

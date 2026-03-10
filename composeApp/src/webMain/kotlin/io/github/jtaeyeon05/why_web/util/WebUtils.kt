@@ -1,4 +1,4 @@
-package io.github.jtaeyeon05.why_web
+package io.github.jtaeyeon05.why_web.util
 
 import kotlin.js.js
 

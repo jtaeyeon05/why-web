@@ -1,4 +1,4 @@
-package io.github.jtaeyeon05.why_web
+package io.github.jtaeyeon05.why_web.ui
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
