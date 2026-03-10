@@ -20,7 +20,7 @@ fun main() {
                 delay(10_000)
                 stopLoader()
             }
-            App()
         }
+        App()
     }
 }
