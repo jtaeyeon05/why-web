@@ -58,10 +58,15 @@ private val AppTypography: Typography
 
 
 object Colors {
-    val primary = Color(0xFFFF0000)
+    val primary = Color(0xFF91D4C2)
     val onPrimary = Color(0xFF000000)
-    val primaryContainer = Color(0xFF800000)
+    val primaryContainer = Color(0xFF334742)
     val onPrimaryContainer = Color(0xFFFFFFFF)
+
+    val secondary = Color(0xFFFF0000)
+    val onSecondary = Color(0xFF000000)
+    val secondaryContainer = Color(0xFF800000)
+    val onSecondaryContainer = Color(0xFFFFFFFF)
 
     val background = Color(0xFF000000)
     val onBackground = Color(0xFFFFFFFF)
@@ -100,14 +105,14 @@ private val colorScheme = ColorScheme(
     onPrimaryFixed = Colors.onPrimary,
     onPrimaryFixedVariant = Colors.onPrimaryContainer,
 
-    secondary = Colors.transparent,
-    onSecondary = Colors.transparent,
-    secondaryContainer = Colors.transparent,
-    onSecondaryContainer = Colors.transparent,
-    secondaryFixed = Colors.transparent,
-    secondaryFixedDim = Colors.transparent,
-    onSecondaryFixed = Colors.transparent,
-    onSecondaryFixedVariant = Colors.transparent,
+    secondary = Colors.secondary,
+    onSecondary = Colors.onSecondary,
+    secondaryContainer = Colors.secondaryContainer,
+    onSecondaryContainer = Colors.onSecondaryContainer,
+    secondaryFixed = Colors.secondary,
+    secondaryFixedDim = Colors.secondaryContainer,
+    onSecondaryFixed = Colors.onSecondary,
+    onSecondaryFixedVariant = Colors.onSecondaryContainer,
 
     tertiary = Colors.transparent,
     onTertiary = Colors.transparent,

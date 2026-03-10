@@ -130,7 +130,7 @@ fun rememberLayoutConstraints(
             LayoutConstraints.BoxSize(
                 buttonHeight = buttonHeight,
                 selectionBoxMinWidth = base * 0.33f,
-                selectionBoxMaxWidth = base,
+                selectionBoxMaxWidth = base - padding.large * 2,
                 selectionBoxHeight = buttonHeight * 2 + padding.medium * 2 + inset.borderWidth * 2,
                 messageBoxWidth = base,
                 messageBoxHeight = typography.mediumLineHeight.dp * 4 + padding.medium * 2 + inset.borderWidth * 2,

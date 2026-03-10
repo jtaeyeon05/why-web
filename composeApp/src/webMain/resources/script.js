@@ -13,3 +13,7 @@
         loader?.remove();
     }
 })();
+
+function openTabInNewTab(url) {
+    window.open(url, "_blank")
+}

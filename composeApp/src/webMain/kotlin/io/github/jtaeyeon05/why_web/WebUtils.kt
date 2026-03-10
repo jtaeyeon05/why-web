@@ -3,6 +3,8 @@ package io.github.jtaeyeon05.why_web
 import kotlin.js.js
 
 
+external fun openTabInNewTab(url: String)
+
 fun showCompose() {
     js(
         """
