@@ -4,31 +4,35 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import org.jetbrains.compose.resources.Font
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.preloadFont
 
 import why_web.composeapp.generated.resources.Mona12
 import why_web.composeapp.generated.resources.Mona12_Bold
 import why_web.composeapp.generated.resources.Res
 
 
-val Mona12: FontFamily
+@OptIn(ExperimentalResourceApi::class)
+val Mona12: FontFamily?
     @Composable
-    get () = FontFamily(
-        Font(
+    get () {
+        val regular by preloadFont(
             resource = Res.font.Mona12,
             weight = FontWeight.Normal,
             style = FontStyle.Normal,
-        ),
-        Font(
+        )
+        val bold by preloadFont(
             resource = Res.font.Mona12_Bold,
             weight = FontWeight.Bold,
             style = FontStyle.Normal,
-        ),
-    )
+        )
+        return if (regular != null && bold != null) FontFamily(regular!!, bold!!) else null
+    }
 
 private val AppTypography: Typography
     @Composable
@@ -145,7 +149,7 @@ private val colorScheme = ColorScheme(
 
 @Composable
 fun AppTheme(
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
 ) {
     MaterialTheme(
         colorScheme = colorScheme,
