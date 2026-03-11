@@ -25,12 +25,21 @@ data class LayoutConstraints(
 
     data class BoxSize(
         val buttonHeight: Dp,
-        val selectionBoxMinWidth: Dp,
-        val selectionBoxMaxWidth: Dp,
-        val selectionBoxHeight: Dp,
+        val defaultSelectionLine: Int,
+        val defaultMessageLine: Int,
+        val selectionBoxWidth: WidthRange,
+        val selectionBoxHeight: (Int?) -> Dp,
         val messageBoxWidth: Dp,
-        val messageBoxHeight: Dp,
-    )
+        val messageBoxHeight: (Int?) -> Dp,
+    ) {
+        data class WidthRange(
+            val min: Dp,
+            val max: Dp
+        ) : ClosedRange<Dp> {
+            override val start: Dp get() = min
+            override val endInclusive: Dp get() = max
+        }
+    }
 
     data class InsetSize(
         val borderWidth: Dp,
@@ -126,14 +135,26 @@ fun rememberLayoutConstraints(
 
         val box = run {
             val buttonHeight = typography.mediumLineHeight.dp + padding.small * 2
+            val defaultSelectionLine = 2
+            val defaultMessageLine = 4
 
             LayoutConstraints.BoxSize(
                 buttonHeight = buttonHeight,
-                selectionBoxMinWidth = base * 0.33f,
-                selectionBoxMaxWidth = base - padding.large * 2,
-                selectionBoxHeight = buttonHeight * 2 + padding.medium * 2 + inset.borderWidth * 2,
+                defaultSelectionLine = defaultSelectionLine,
+                defaultMessageLine = defaultMessageLine,
+                selectionBoxWidth = LayoutConstraints.BoxSize.WidthRange(
+                    min = base * 0.33f,
+                    max = base - padding.large * 2,
+                ),
+                selectionBoxHeight = { line ->
+                    val line = if (line == null || line !in 1 .. 10) defaultSelectionLine else line
+                    buttonHeight * line + padding.medium * 2 + inset.borderWidth * 2
+                },
                 messageBoxWidth = base,
-                messageBoxHeight = typography.mediumLineHeight.dp * 4 + padding.medium * 2 + inset.borderWidth * 2,
+                messageBoxHeight = { line ->
+                    val line = if (line == null || line !in 0 .. 10) defaultMessageLine else line
+                    typography.mediumLineHeight.dp * line + padding.medium * 2 + inset.borderWidth * 2
+                },
             )
         }
 

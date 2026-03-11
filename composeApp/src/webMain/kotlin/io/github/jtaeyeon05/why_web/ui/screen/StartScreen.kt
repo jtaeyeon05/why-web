@@ -76,7 +76,7 @@ fun BoxScope.StartScreen(
         Column(
             modifier = Modifier
                 .width(box.messageBoxWidth)
-                .height(box.messageBoxHeight)
+                .height(box.messageBoxHeight(box.defaultMessageLine))
                 .align(Alignment.BottomCenter)
                 .border(
                     width = inset.borderWidth,
@@ -128,13 +128,13 @@ fun BoxScope.StartScreen(
         var selection by rememberSaveable { mutableStateOf(0) }
         Column(
             modifier = Modifier
-                .padding(bottom = box.messageBoxHeight + padding.medium)
+                .padding(bottom = box.messageBoxHeight(box.defaultMessageLine) + padding.medium)
                 .width(IntrinsicSize.Max)
                 .sizeIn(
-                    minWidth = box.selectionBoxMinWidth,
-                    maxWidth = box.selectionBoxMaxWidth,
-                    minHeight = box.selectionBoxHeight,
-                    maxHeight = box.selectionBoxHeight,
+                    minWidth = box.selectionBoxWidth.min,
+                    maxWidth = box.selectionBoxWidth.max,
+                    minHeight = box.selectionBoxHeight(box.defaultSelectionLine),
+                    maxHeight = box.selectionBoxHeight(box.defaultSelectionLine),
                 )
                 .align(Alignment.BottomCenter)
                 .border(
