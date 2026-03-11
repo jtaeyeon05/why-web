@@ -11,7 +11,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.preloadFont
-
 import why_web.composeapp.generated.resources.Mona12
 import why_web.composeapp.generated.resources.Mona12_Bold
 import why_web.composeapp.generated.resources.Res
