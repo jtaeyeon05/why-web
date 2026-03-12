@@ -1,23 +1,16 @@
 package io.github.jtaeyeon05.why_web.ui
 
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -26,6 +19,7 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
+import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -44,13 +38,22 @@ fun ClassicButton(
         targetValue = MaterialTheme.colorScheme.background,
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 1000,
-                easing = LinearEasing
+                durationMillis = 500,
+                easing = EaseInOutCubic
             ),
             repeatMode = RepeatMode.Reverse
         ),
         label = "Selection Color"
     )
+
+    val keyboardManager = LocalKeyboardEventManager.current
+    LaunchedEffect(Unit) {
+        keyboardManager.events.collect { webKeyEvent ->
+            if (focused && webKeyEvent.isConfirmPressed) {
+                onClick()
+            }
+        }
+    }
 
     layoutConstraints.run {
         Surface(

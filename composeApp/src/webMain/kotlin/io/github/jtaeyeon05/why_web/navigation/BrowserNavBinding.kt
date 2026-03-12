@@ -11,7 +11,7 @@ import io.github.jtaeyeon05.why_web.util.decodeURIComponent
 
 
 fun NavController.navigationFromInitHash() {
-    val initHash = BrowserWindow.Location.hash.removePrefix("#")
+    val initHash = BrowserWindow.location.hash.removePrefix("#")
     val params = URLSearchParams(initHash.substringAfter("?", ""))
 
     if (initHash.isBlank()) return

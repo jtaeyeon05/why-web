@@ -6,10 +6,10 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    kotlin("plugin.serialization") version "2.2.20"
+    kotlin("plugin.serialization") version "2.3.0"
 }
 
-val version = "0.0.05B"
+val version = "0.0.06B"
 val buildInfoPackage = "io.github.jtaeyeon05.why_web.buildinfo"
 val buildInfoDir = layout.buildDirectory.dir("generated/sources/buildInfo/kotlin")
 
@@ -77,9 +77,8 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.2")
-            implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
-            implementation("io.github.vinceglb:confettikit:0.6.0")
+            // implementation("io.github.vinceglb:confettikit:0.6.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

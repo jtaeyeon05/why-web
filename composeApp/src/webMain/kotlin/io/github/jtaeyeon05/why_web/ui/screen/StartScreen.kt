@@ -1,8 +1,5 @@
 package io.github.jtaeyeon05.why_web.ui.screen
 
-import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
@@ -20,8 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -34,6 +29,7 @@ import androidx.navigation.NavController
 import io.github.jtaeyeon05.why_web.buildinfo.BuildInfo
 import io.github.jtaeyeon05.why_web.ui.ClassicButton
 import io.github.jtaeyeon05.why_web.ui.LayoutConstraints
+import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 import io.github.jtaeyeon05.why_web.util.openTabInNewTab
 import kotlinx.coroutines.delay
 
@@ -96,20 +92,23 @@ fun BoxScope.StartScreen(
         }
 
         // Selection
-        val infiniteTransition = rememberInfiniteTransition(label = "Selection Color Transition")
-        val selectionColor by infiniteTransition.animateColor(
-            initialValue = MaterialTheme.colorScheme.primaryContainer,
-            targetValue = MaterialTheme.colorScheme.background,
-            animationSpec = infiniteRepeatable(
-                animation = tween(
-                    durationMillis = 1000,
-                    easing = LinearEasing
-                ),
-                repeatMode = RepeatMode.Reverse
-            ),
-            label = "Selection Color"
-        )
+        val keyboardManager = LocalKeyboardEventManager.current
+        val selectionScrollState = rememberScrollState()
+
         var selection by rememberSaveable { mutableStateOf(0) }
+
+        LaunchedEffect(Unit) {
+            keyboardManager.events.collect { webKeyEvent ->
+                if (webKeyEvent.isUpPressed && selection - 1 >= 0) {
+                    selection -= 1
+                    if (selection == 0) selectionScrollState.scrollTo(0)
+                } else if (webKeyEvent.isDownPressed && selection + 1 <= 2) {
+                    selection += 1
+                    if (selection == 2) selectionScrollState.scrollTo(selectionScrollState.maxValue)
+                }
+            }
+        }
+
         Column(
             modifier = Modifier
                 .padding(bottom = box.messageBoxHeight(box.defaultMessageLine) + padding.medium)
@@ -127,7 +126,7 @@ fun BoxScope.StartScreen(
                     shape = RectangleShape
                 )
                 .padding(inset.borderWidth + padding.medium)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(selectionScrollState)
         ) {
             ClassicButton(
                 focused = selection == 0,
