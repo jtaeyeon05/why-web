@@ -1,27 +1,11 @@
 package io.github.jtaeyeon05.why_web.ui.screen
 
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.interaction.HoverInteraction
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.TextAutoSize
@@ -30,16 +14,14 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -55,6 +37,7 @@ import io.github.jtaeyeon05.why_web.util.openTabInNewTab
 import kotlinx.coroutines.delay
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BoxScope.StartScreen(
     navController: NavController,
@@ -145,21 +128,23 @@ fun BoxScope.StartScreen(
                 .padding(inset.borderWidth + padding.medium)
                 .verticalScroll(rememberScrollState())
         ) {
-            val interactionSource0 = remember { MutableInteractionSource() }
-            LaunchedEffect(interactionSource0) {
-                interactionSource0.interactions.collect { interaction ->
-                    if (interaction is HoverInteraction.Enter) {
-                        selection = 0
-                    }
-                }
-            }
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(box.buttonHeight)
                     .background(if (selection == 0) selectionColor else MaterialTheme.colorScheme.background)
-                    .clickable(interactionSource = interactionSource0) {
-                        openTabInNewTab("https://xodus.lol/") // TODO
+                    .onPointerEvent(PointerEventType.Enter) {
+                        selection = 0
+                    }
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onPress = {
+                                selection = 0
+                            },
+                            onTap = {
+                                openTabInNewTab("https://xodus.lol/")
+                            }
+                        )
                     }
                     .padding(padding.small),
                 text = "예",
@@ -167,21 +152,23 @@ fun BoxScope.StartScreen(
                 lineHeight = typography.lineHeight.em,
             )
 
-            val interactionSource1 = remember { MutableInteractionSource() }
-            LaunchedEffect(interactionSource1) {
-                interactionSource1.interactions.collect { interaction ->
-                    if (interaction is HoverInteraction.Enter) {
-                        selection = 1
-                    }
-                }
-            }
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(box.buttonHeight)
                     .background(if (selection == 1) selectionColor else MaterialTheme.colorScheme.background)
-                    .clickable(interactionSource = interactionSource1) {
-                        openTabInNewTab("https://xodus.lol/") // TODO
+                    .onPointerEvent(PointerEventType.Enter) {
+                        selection = 1
+                    }
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onPress = {
+                                selection = 1
+                            },
+                            onTap = {
+                                openTabInNewTab("https://xodus.lol/")
+                            }
+                        )
                     }
                     .padding(padding.small),
                 text = "아니요",
@@ -189,21 +176,23 @@ fun BoxScope.StartScreen(
                 lineHeight = typography.lineHeight.em,
             )
 
-            val interactionSource2 = remember { MutableInteractionSource() }
-            LaunchedEffect(interactionSource2) {
-                interactionSource2.interactions.collect { interaction ->
-                    if (interaction is HoverInteraction.Enter) {
-                        selection = 2
-                    }
-                }
-            }
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(box.buttonHeight)
                     .background(if (selection == 2) selectionColor else MaterialTheme.colorScheme.background)
-                    .clickable(interactionSource = interactionSource2) {
-                        openTabInNewTab("https://xodus.lol/") // TODO
+                    .onPointerEvent(PointerEventType.Enter) {
+                        selection = 2
+                    }
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onPress = {
+                                selection = 2
+                            },
+                            onTap = {
+                                openTabInNewTab("https://xodus.lol/")
+                            }
+                        )
                     }
                     .padding(padding.small),
                 text = "!!!",
