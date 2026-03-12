@@ -47,7 +47,8 @@ fun ClassicButton(
     )
 
     val keyboardManager = LocalKeyboardEventManager.current
-    LaunchedEffect(Unit) {
+    LaunchedEffect(focused, onClick) {
+        if (!focused) return@LaunchedEffect
         keyboardManager.events.collect { webKeyEvent ->
             if (focused && webKeyEvent.isConfirmPressed) {
                 onClick()

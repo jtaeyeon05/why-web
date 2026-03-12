@@ -1,5 +1,6 @@
 package io.github.jtaeyeon05.why_web.ui.widget
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,6 +48,7 @@ fun MessageBox(
             modifier = modifier
                 .width(box.messageBoxWidth)
                 .height(box.messageBoxHeight(line))
+                .background(MaterialTheme.colorScheme.background)
                 .border(
                     width = inset.borderWidth,
                     color = MaterialTheme.colorScheme.onBackground,

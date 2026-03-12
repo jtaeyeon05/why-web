@@ -19,6 +19,9 @@ fun NavController.navigationFromInitHash() {
         "", "start" -> {
             navigate(Screen.Start)
         }
+        "notToBeBorn" -> {
+            navigate(Screen.NotToBeBorn)
+        }
         "notFound" -> {
             val route = params.get("notFound")?.let { decodeURIComponent(it) }
             navigate(
@@ -41,6 +44,9 @@ suspend fun NavController.bindBrowserHash() {
             when {
                 route.startsWith(Screen.Start.serializer().descriptor.serialName) -> {
                     "#start"
+                }
+                route.startsWith(Screen.NotToBeBorn.serializer().descriptor.serialName) -> {
+                    "#notToBeBorn"
                 }
                 route.startsWith(Screen.NotFound.serializer().descriptor.serialName) -> {
                     val args = entry.toRoute<Screen.NotFound>()

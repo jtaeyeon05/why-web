@@ -1,5 +1,6 @@
 package io.github.jtaeyeon05.why_web.ui.widget
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -27,6 +28,7 @@ fun SelectionBox(
                     minWidth = box.selectionBoxWidth.min,
                     maxWidth = box.selectionBoxWidth.max,
                 )
+                .background(MaterialTheme.colorScheme.background)
                 .border(
                     width = inset.borderWidth,
                     color = MaterialTheme.colorScheme.onBackground,
@@ -62,6 +64,7 @@ fun SelectionBox(
                     minHeight = box.selectionBoxHeight(line),
                     maxHeight = box.selectionBoxHeight(line),
                 )
+                .background(MaterialTheme.colorScheme.background)
                 .border(
                     width = inset.borderWidth,
                     color = MaterialTheme.colorScheme.onBackground,

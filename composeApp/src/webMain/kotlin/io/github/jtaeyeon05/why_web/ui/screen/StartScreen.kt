@@ -10,8 +10,12 @@ import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -20,6 +24,7 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import io.github.jtaeyeon05.why_web.buildinfo.BuildInfo
+import io.github.jtaeyeon05.why_web.navigation.Screen
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 import io.github.jtaeyeon05.why_web.ui.foundation.rememberAnimatedText
@@ -27,7 +32,6 @@ import io.github.jtaeyeon05.why_web.ui.widget.Avatar
 import io.github.jtaeyeon05.why_web.ui.widget.ClassicButton
 import io.github.jtaeyeon05.why_web.ui.widget.MessageBox
 import io.github.jtaeyeon05.why_web.ui.widget.SelectionBox
-import io.github.jtaeyeon05.why_web.util.openTabInNewTab
 
 
 @Composable
@@ -67,21 +71,21 @@ fun BoxScope.StartScreen(navController: NavController) {
         ) {
             ClassicButton(
                 focused = selection == 0,
-                onClick = { openTabInNewTab("https://xodus.lol/") },
+                onClick = { /* TODO */ },
                 onFocused = { selection = 0 },
             ) {
                 Text("예")
             }
             ClassicButton(
                 focused = selection == 1,
-                onClick = { openTabInNewTab("https://xodus.lol/") },
+                onClick = { navController.navigate(Screen.NotToBeBorn) },
                 onFocused = { selection = 1 },
             ) {
                 Text("아니요")
             }
             ClassicButton(
                 focused = selection == 2,
-                onClick = { openTabInNewTab("https://xodus.lol/") },
+                onClick = { /* TODO */ },
                 onFocused = { selection = 2 },
             ) {
                 Text("!!!")
