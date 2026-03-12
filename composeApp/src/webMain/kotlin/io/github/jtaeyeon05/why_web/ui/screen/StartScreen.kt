@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
@@ -30,26 +29,16 @@ import io.github.jtaeyeon05.why_web.buildinfo.BuildInfo
 import io.github.jtaeyeon05.why_web.ui.ClassicButton
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
+import io.github.jtaeyeon05.why_web.ui.foundation.rememberAnimatedText
 import io.github.jtaeyeon05.why_web.util.openTabInNewTab
-import kotlinx.coroutines.delay
 
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BoxScope.StartScreen(navController: NavController) {
-    var nowMessage by rememberSaveable { mutableStateOf("") }
-    val targetMessage = "태어나시겠습니까?"
-
-    LaunchedEffect(Unit) {
-        delay(1_000)
-        while (nowMessage.length < targetMessage.length) {
-            nowMessage += targetMessage[nowMessage.length]
-            delay(100)
-        }
-    }
-
     LocalLayoutConstraints.current.run {
         // Message
+        val message = rememberAnimatedText("태어나시겠습니까?")
+
         Column(
             modifier = Modifier
                 .width(box.messageBoxWidth)
@@ -82,7 +71,7 @@ fun BoxScope.StartScreen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(typography.mediumLineHeight.dp * 3),
-                text = nowMessage,
+                text = message,
                 fontSize = typography.mediumFontSize.sp,
                 lineHeight = typography.lineHeight.em,
             )
