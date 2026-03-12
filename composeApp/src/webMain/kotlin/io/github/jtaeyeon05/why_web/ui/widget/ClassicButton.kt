@@ -28,7 +28,7 @@ import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 fun ClassicButton(
     focused: Boolean,
     onClick: () -> Unit,
-    onFocused: () -> Unit,
+    onFocused: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
@@ -60,10 +60,10 @@ fun ClassicButton(
             modifier = modifier
                 .fillMaxWidth()
                 .height(box.buttonHeight)
-                .onPointerEvent(PointerEventType.Enter) { onFocused() }
+                .onPointerEvent(PointerEventType.Enter) { if (onFocused != null) onFocused() }
                 .pointerInput(Unit) {
                     detectTapGestures(
-                        onPress = { onFocused() },
+                        onPress = { if (onFocused != null) onFocused() },
                         onTap = { onClick() }
                     )
                 },
