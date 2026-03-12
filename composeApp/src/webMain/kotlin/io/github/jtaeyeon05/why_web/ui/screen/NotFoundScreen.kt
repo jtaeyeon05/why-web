@@ -7,16 +7,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import io.github.jtaeyeon05.why_web.navigation.Screen
-import io.github.jtaeyeon05.why_web.ui.LayoutConstraints
+import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 
 
 @Composable
 fun BoxScope.NotFoundScreen(
     screen: Screen.NotFound,
     navController: NavController,
-    layoutConstraints: LayoutConstraints,
 ) {
-    layoutConstraints.run {
+    LocalLayoutConstraints.current.run {
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = screen.route,

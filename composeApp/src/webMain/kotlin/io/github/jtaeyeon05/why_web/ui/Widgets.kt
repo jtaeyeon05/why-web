@@ -20,6 +20,7 @@ import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.style.TextAlign
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
+import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -28,7 +29,6 @@ fun ClassicButton(
     focused: Boolean,
     onClick: () -> Unit,
     onFocused: () -> Unit,
-    layoutConstraints: LayoutConstraints,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
@@ -55,7 +55,7 @@ fun ClassicButton(
         }
     }
 
-    layoutConstraints.run {
+    LocalLayoutConstraints.current.run {
         Surface(
             modifier = modifier
                 .fillMaxWidth()

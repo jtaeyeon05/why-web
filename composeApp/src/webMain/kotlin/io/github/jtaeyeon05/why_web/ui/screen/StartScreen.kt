@@ -28,18 +28,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import io.github.jtaeyeon05.why_web.buildinfo.BuildInfo
 import io.github.jtaeyeon05.why_web.ui.ClassicButton
-import io.github.jtaeyeon05.why_web.ui.LayoutConstraints
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
+import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 import io.github.jtaeyeon05.why_web.util.openTabInNewTab
 import kotlinx.coroutines.delay
 
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun BoxScope.StartScreen(
-    navController: NavController,
-    layoutConstraints: LayoutConstraints
-) {
+fun BoxScope.StartScreen(navController: NavController) {
     var nowMessage by rememberSaveable { mutableStateOf("") }
     val targetMessage = "태어나시겠습니까?"
 
@@ -51,7 +48,7 @@ fun BoxScope.StartScreen(
         }
     }
 
-    layoutConstraints.run {
+    LocalLayoutConstraints.current.run {
         // Message
         Column(
             modifier = Modifier
@@ -132,7 +129,6 @@ fun BoxScope.StartScreen(
                 focused = selection == 0,
                 onClick = { openTabInNewTab("https://xodus.lol/") },
                 onFocused = { selection = 0 },
-                layoutConstraints = layoutConstraints,
             ) {
                 Text("예")
             }
@@ -140,7 +136,6 @@ fun BoxScope.StartScreen(
                 focused = selection == 1,
                 onClick = { openTabInNewTab("https://xodus.lol/") },
                 onFocused = { selection = 1 },
-                layoutConstraints = layoutConstraints,
             ) {
                 Text("아니요")
             }
@@ -148,7 +143,6 @@ fun BoxScope.StartScreen(
                 focused = selection == 2,
                 onClick = { openTabInNewTab("https://xodus.lol/") },
                 onFocused = { selection = 2 },
-                layoutConstraints = layoutConstraints,
             ) {
                 Text("!!!")
             }

@@ -1,6 +1,5 @@
 package io.github.jtaeyeon05.why_web.util
 
-import kotlin.js.ExperimentalWasmJsInterop
 import kotlin.js.JsName
 
 
@@ -9,7 +8,7 @@ external object BrowserWindow {
     @JsName("location")
     val location: WindowLocation
     fun addEventListener(type: String, listener: (WebKeyboardEvent) -> Unit)
-    // fun removeEventListener(type: String, listener: (WebKeyboardEvent) -> Unit)
+    fun removeEventListener(type: String, listener: (WebKeyboardEvent) -> Unit)
 }
 
 @JsName("URLSearchParams")
@@ -33,12 +32,8 @@ external interface WindowLocation {
     val hash: String
 }
 
-@OptIn(ExperimentalWasmJsInterop::class)
-// @JsFun("str => encodeURIComponent(str)")
 external fun encodeURIComponent(str: String): String
 
-@OptIn(ExperimentalWasmJsInterop::class)
-// @JsFun("str => decodeURIComponent(str)")
 external fun decodeURIComponent(str: String): String
 
 external fun openTabInNewTab(url: String)
