@@ -1,35 +1,32 @@
 package io.github.jtaeyeon05.why_web.ui.screen
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.TextAutoSize
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import io.github.jtaeyeon05.why_web.buildinfo.BuildInfo
-import io.github.jtaeyeon05.why_web.ui.ClassicButton
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 import io.github.jtaeyeon05.why_web.ui.foundation.rememberAnimatedText
+import io.github.jtaeyeon05.why_web.ui.widget.Avatar
+import io.github.jtaeyeon05.why_web.ui.widget.ClassicButton
+import io.github.jtaeyeon05.why_web.ui.widget.MessageBox
+import io.github.jtaeyeon05.why_web.ui.widget.SelectionBox
 import io.github.jtaeyeon05.why_web.util.openTabInNewTab
 
 
@@ -38,81 +35,35 @@ fun BoxScope.StartScreen(navController: NavController) {
     LocalLayoutConstraints.current.run {
         // Message
         val message = rememberAnimatedText("태어나시겠습니까?")
-
-        Column(
-            modifier = Modifier
-                .width(box.messageBoxWidth)
-                .height(box.messageBoxHeight(box.defaultMessageLine))
-                .align(Alignment.BottomCenter)
-                .border(
-                    width = inset.borderWidth,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    shape = RectangleShape
-                )
-                .padding(inset.borderWidth + padding.medium)
-        ) {
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(typography.mediumLineHeight.dp),
-                text = buildAnnotatedString {
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append("[ ")
-                    }
-                    append("🧞")
-                    withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                        append(" ?? ]")
-                    }
-                },
-                fontSize = typography.mediumFontSize.sp,
-                lineHeight = typography.lineHeight.em,
-            )
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(typography.mediumLineHeight.dp * 3),
-                text = message,
-                fontSize = typography.mediumFontSize.sp,
-                lineHeight = typography.lineHeight.em,
-            )
-        }
+        MessageBox(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            message = message,
+            avatar = Avatar.God,
+        )
 
         // Selection
         val keyboardManager = LocalKeyboardEventManager.current
-        val selectionScrollState = rememberScrollState()
-
+        val selectionLine = 3
         var selection by rememberSaveable { mutableStateOf(0) }
-
+        var selectionScrollTo by rememberSaveable { mutableStateOf(0) }
         LaunchedEffect(Unit) {
             keyboardManager.events.collect { webKeyEvent ->
-                if (webKeyEvent.isUpPressed && selection - 1 >= 0) {
-                    selection -= 1
-                    if (selection == 0) selectionScrollState.scrollTo(0)
-                } else if (webKeyEvent.isDownPressed && selection + 1 <= 2) {
-                    selection += 1
-                    if (selection == 2) selectionScrollState.scrollTo(selectionScrollState.maxValue)
+                if (webKeyEvent.isUpPressed) {
+                    selection = (selection - 1).coerceAtLeast(0)
+                    selectionScrollTo = selection
+                } else if (webKeyEvent.isDownPressed) {
+                    selection = (selection + 1).coerceAtMost(selectionLine - 1)
+                    selectionScrollTo = selection
                 }
             }
         }
 
-        Column(
+        SelectionBox(
             modifier = Modifier
-                .padding(bottom = box.messageBoxHeight(box.defaultMessageLine) + padding.medium)
-                .width(IntrinsicSize.Max)
-                .sizeIn(
-                    minWidth = box.selectionBoxWidth.min,
-                    maxWidth = box.selectionBoxWidth.max,
-                    minHeight = box.selectionBoxHeight(box.defaultSelectionLine),
-                    maxHeight = box.selectionBoxHeight(box.defaultSelectionLine),
-                )
                 .align(Alignment.BottomCenter)
-                .border(
-                    width = inset.borderWidth,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    shape = RectangleShape
-                )
-                .padding(inset.borderWidth + padding.medium)
-                .verticalScroll(selectionScrollState)
+                .padding(bottom = box.messageBoxHeight(box.defaultMessageLine) + padding.medium),
+            scrollTo = selectionScrollTo,
+            line = 2,
         ) {
             ClassicButton(
                 focused = selection == 0,

@@ -1,4 +1,4 @@
-package io.github.jtaeyeon05.why_web.ui
+package io.github.jtaeyeon05.why_web.ui.widget
 
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.*
