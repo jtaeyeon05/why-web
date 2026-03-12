@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import io.github.jtaeyeon05.why_web.buildinfo.BuildInfo
+import io.github.jtaeyeon05.why_web.ui.ClassicButton
 import io.github.jtaeyeon05.why_web.ui.LayoutConstraints
 import io.github.jtaeyeon05.why_web.util.openTabInNewTab
 import kotlinx.coroutines.delay
@@ -128,77 +129,30 @@ fun BoxScope.StartScreen(
                 .padding(inset.borderWidth + padding.medium)
                 .verticalScroll(rememberScrollState())
         ) {
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(box.buttonHeight)
-                    .background(if (selection == 0) selectionColor else MaterialTheme.colorScheme.background)
-                    .onPointerEvent(PointerEventType.Enter) {
-                        selection = 0
-                    }
-                    .pointerInput(Unit) {
-                        detectTapGestures(
-                            onPress = {
-                                selection = 0
-                            },
-                            onTap = {
-                                openTabInNewTab("https://xodus.lol/")
-                            }
-                        )
-                    }
-                    .padding(padding.small),
-                text = "예",
-                fontSize = typography.mediumFontSize.sp,
-                lineHeight = typography.lineHeight.em,
-            )
-
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(box.buttonHeight)
-                    .background(if (selection == 1) selectionColor else MaterialTheme.colorScheme.background)
-                    .onPointerEvent(PointerEventType.Enter) {
-                        selection = 1
-                    }
-                    .pointerInput(Unit) {
-                        detectTapGestures(
-                            onPress = {
-                                selection = 1
-                            },
-                            onTap = {
-                                openTabInNewTab("https://xodus.lol/")
-                            }
-                        )
-                    }
-                    .padding(padding.small),
-                text = "아니요",
-                fontSize = typography.mediumFontSize.sp,
-                lineHeight = typography.lineHeight.em,
-            )
-
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(box.buttonHeight)
-                    .background(if (selection == 2) selectionColor else MaterialTheme.colorScheme.background)
-                    .onPointerEvent(PointerEventType.Enter) {
-                        selection = 2
-                    }
-                    .pointerInput(Unit) {
-                        detectTapGestures(
-                            onPress = {
-                                selection = 2
-                            },
-                            onTap = {
-                                openTabInNewTab("https://xodus.lol/")
-                            }
-                        )
-                    }
-                    .padding(padding.small),
-                text = "!!!",
-                fontSize = typography.mediumFontSize.sp,
-                lineHeight = typography.lineHeight.em,
-            )
+            ClassicButton(
+                focused = selection == 0,
+                onClick = { openTabInNewTab("https://xodus.lol/") },
+                onFocused = { selection = 0 },
+                layoutConstraints = layoutConstraints,
+            ) {
+                Text("예")
+            }
+            ClassicButton(
+                focused = selection == 1,
+                onClick = { openTabInNewTab("https://xodus.lol/") },
+                onFocused = { selection = 1 },
+                layoutConstraints = layoutConstraints,
+            ) {
+                Text("아니요")
+            }
+            ClassicButton(
+                focused = selection == 2,
+                onClick = { openTabInNewTab("https://xodus.lol/") },
+                onFocused = { selection = 2 },
+                layoutConstraints = layoutConstraints,
+            ) {
+                Text("!!!")
+            }
         }
 
         // IdentifierBox
