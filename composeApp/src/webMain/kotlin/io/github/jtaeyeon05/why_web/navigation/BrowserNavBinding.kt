@@ -19,6 +19,9 @@ fun NavController.navigationFromInitHash() {
         "", "start" -> {
             navigate(Screen.Start)
         }
+        "ready" -> {
+            navigate(Screen.Ready)
+        }
         "notToBeBorn" -> {
             navigate(Screen.NotToBeBorn)
         }
@@ -44,6 +47,9 @@ suspend fun NavController.bindBrowserHash() {
             when {
                 route.startsWith(Screen.Start.serializer().descriptor.serialName) -> {
                     "#start"
+                }
+                route.startsWith(Screen.Ready.serializer().descriptor.serialName) -> {
+                    "#ready"
                 }
                 route.startsWith(Screen.NotToBeBorn.serializer().descriptor.serialName) -> {
                     "#notToBeBorn"

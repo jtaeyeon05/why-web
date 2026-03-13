@@ -8,6 +8,9 @@ object Screen {
     data object Start
 
     @Serializable
+    data object Ready
+
+    @Serializable
     data object NotToBeBorn
 
     @Serializable
