@@ -23,7 +23,9 @@ import io.github.jtaeyeon05.why_web.ui.widget.SelectionBox
 
 
 @Composable
-fun BoxScope.ReadyScreen(navController: NavController) {
+fun BoxScope.ReadyScreen(
+    navController: NavController,
+) {
     LocalLayoutConstraints.current.run {
         // Message
         val message = rememberAnimatedText(

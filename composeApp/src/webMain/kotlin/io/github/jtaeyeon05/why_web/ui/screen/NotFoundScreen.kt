@@ -18,8 +18,8 @@ import io.github.jtaeyeon05.why_web.ui.widget.SelectionBox
 
 @Composable
 fun BoxScope.NotFoundScreen(
-    screen: Screen.NotFound,
     navController: NavController,
+    screen: Screen.NotFound,
 ) {
     LocalLayoutConstraints.current.run {
         // Message

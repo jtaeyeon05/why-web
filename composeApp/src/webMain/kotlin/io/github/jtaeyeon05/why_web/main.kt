@@ -3,8 +3,6 @@ package io.github.jtaeyeon05.why_web
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
-import io.github.jtaeyeon05.why_web.navigation.bindBrowserHash
-import io.github.jtaeyeon05.why_web.navigation.navigationFromInitHash
 import io.github.jtaeyeon05.why_web.ui.Mona12
 import io.github.jtaeyeon05.why_web.util.showCompose
 import io.github.jtaeyeon05.why_web.util.stopLoader
@@ -27,11 +25,6 @@ fun main() {
             }
         }
 
-        App(
-            onNavHostReady = { navController ->
-                navController.navigationFromInitHash()
-                navController.bindBrowserHash()
-            }
-        )
+        App()
     }
 }

@@ -35,7 +35,9 @@ import io.github.jtaeyeon05.why_web.ui.widget.SelectionBox
 
 
 @Composable
-fun BoxScope.StartScreen(navController: NavController) {
+fun BoxScope.StartScreen(
+    navController: NavController,
+) {
     LocalLayoutConstraints.current.run {
         // Message
         val message = rememberAnimatedText("태어나시겠습니까?")

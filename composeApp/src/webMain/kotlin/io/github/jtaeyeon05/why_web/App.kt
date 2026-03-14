@@ -7,11 +7,11 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import io.github.jtaeyeon05.why_web.navigation.Screen
 import io.github.jtaeyeon05.why_web.navigation.appNavGraph
+import io.github.jtaeyeon05.why_web.navigation.bindBrowserHash
+import io.github.jtaeyeon05.why_web.navigation.parseInitHash
 import io.github.jtaeyeon05.why_web.ui.AppTheme
 import io.github.jtaeyeon05.why_web.ui.foundation.KeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
@@ -21,18 +21,17 @@ import io.github.jtaeyeon05.why_web.ui.foundation.WebKeyType
 import io.github.jtaeyeon05.why_web.ui.foundation.rememberLayoutConstraints
 import io.github.jtaeyeon05.why_web.util.BrowserWindow
 import io.github.jtaeyeon05.why_web.util.WebKeyboardEvent
+import io.github.jtaeyeon05.why_web.viewmodel.AppViewModel
 
 
 @Composable
-fun App(
-    onNavHostReady: suspend (NavController) -> Unit = {}
-) {
+fun App() {
     val navController = rememberNavController()
-    var isGraphReady by remember { mutableStateOf(false) }
-    LaunchedEffect(isGraphReady) {
-        if (isGraphReady) {
-            onNavHostReady(navController)
-        }
+    val (initialModel, startScreen) = remember { parseInitHash() }
+    val viewModel = remember(initialModel) { AppViewModel(initialModel) }
+
+    LaunchedEffect(navController) {
+        navController.bindBrowserHash { viewModel.model.value }
     }
 
     AppTheme {
@@ -67,10 +66,12 @@ fun App(
 
                 NavHost(
                     navController = navController,
-                    startDestination = Screen.Start
+                    startDestination = startScreen,
                 ) {
-                    appNavGraph(navController = navController)
-                    isGraphReady = true
+                    appNavGraph(
+                        navController = navController,
+                        viewModel = viewModel,
+                    )
                 }
             }
         }

@@ -13,39 +13,55 @@ import io.github.jtaeyeon05.why_web.ui.screen.ReadyScreen
 import io.github.jtaeyeon05.why_web.ui.screen.StartScreen
 import io.github.jtaeyeon05.why_web.ui.screen.ToBeBorn1Screen
 import io.github.jtaeyeon05.why_web.ui.screen.ToBeBorn2Screen
+import io.github.jtaeyeon05.why_web.viewmodel.AppViewModel
 
 
-fun NavGraphBuilder.appNavGraph(navController: NavController) {
+fun NavGraphBuilder.appNavGraph(
+    navController: NavController,
+    viewModel: AppViewModel,
+) {
     composable<Screen.Start> {
         Box(modifier = Modifier.fillMaxSize()) {
-            StartScreen(navController = navController)
+            StartScreen(
+                navController = navController,
+            )
         }
     }
     composable<Screen.Ready> {
         Box(modifier = Modifier.fillMaxSize()) {
-            ReadyScreen(navController = navController)
+            ReadyScreen(
+                navController = navController,
+            )
         }
     }
     composable<Screen.ToBeBorn1> {
         Box(modifier = Modifier.fillMaxSize()) {
-            ToBeBorn1Screen(navController = navController)
+            ToBeBorn1Screen(
+                navController = navController,
+                viewModel = viewModel,
+            )
         }
     }
     composable<Screen.ToBeBorn2> {
         Box(modifier = Modifier.fillMaxSize()) {
-            ToBeBorn2Screen(navController = navController)
+            ToBeBorn2Screen(
+                navController = navController,
+                viewModel = viewModel,
+            )
         }
     }
     composable<Screen.NotToBeBorn> {
         Box(modifier = Modifier.fillMaxSize()) {
-            NotToBeBornScreen(navController = navController)
+            NotToBeBornScreen(
+                navController = navController,
+            )
         }
     }
     composable<Screen.NotFound> { backStackEntry ->
         Box(modifier = Modifier.fillMaxSize()) {
             NotFoundScreen(
-                screen = backStackEntry.toRoute<Screen.NotFound>(),
                 navController = navController,
+                screen = backStackEntry.toRoute<Screen.NotFound>(),
             )
         }
     }

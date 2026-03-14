@@ -38,7 +38,9 @@ import kotlin.time.Duration
 
 
 @Composable
-fun BoxScope.NotToBeBornScreen(navController: NavController) {
+fun BoxScope.NotToBeBornScreen(
+    navController: NavController,
+) {
     LocalLayoutConstraints.current.run {
         // Confetti
         var showConfetti by rememberSaveable { mutableStateOf(false) }
