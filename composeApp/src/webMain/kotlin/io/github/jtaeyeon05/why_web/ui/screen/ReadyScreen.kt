@@ -59,7 +59,7 @@ fun BoxScope.ReadyScreen(navController: NavController) {
         ) {
             ClassicButton(
                 focused = selection == 0,
-                onClick = { /* TODO */ },
+                onClick = { navController.navigate(Screen.ToBeBorn1) },
                 onFocused = { selection = 0 },
             ) {
                 Text("예")

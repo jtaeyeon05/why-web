@@ -11,6 +11,8 @@ import io.github.jtaeyeon05.why_web.ui.screen.NotFoundScreen
 import io.github.jtaeyeon05.why_web.ui.screen.NotToBeBornScreen
 import io.github.jtaeyeon05.why_web.ui.screen.ReadyScreen
 import io.github.jtaeyeon05.why_web.ui.screen.StartScreen
+import io.github.jtaeyeon05.why_web.ui.screen.ToBeBorn1Screen
+import io.github.jtaeyeon05.why_web.ui.screen.ToBeBorn2Screen
 
 
 fun NavGraphBuilder.appNavGraph(navController: NavController) {
@@ -22,6 +24,16 @@ fun NavGraphBuilder.appNavGraph(navController: NavController) {
     composable<Screen.Ready> {
         Box(modifier = Modifier.fillMaxSize()) {
             ReadyScreen(navController = navController)
+        }
+    }
+    composable<Screen.ToBeBorn1> {
+        Box(modifier = Modifier.fillMaxSize()) {
+            ToBeBorn1Screen(navController = navController)
+        }
+    }
+    composable<Screen.ToBeBorn2> {
+        Box(modifier = Modifier.fillMaxSize()) {
+            ToBeBorn2Screen(navController = navController)
         }
     }
     composable<Screen.NotToBeBorn> {

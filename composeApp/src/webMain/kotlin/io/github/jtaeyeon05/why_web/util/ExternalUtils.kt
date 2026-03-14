@@ -13,8 +13,9 @@ external object BrowserWindow {
 
 @JsName("URLSearchParams")
 external class URLSearchParams(init: String) {
-    fun get(name: String): String?
-    // fun has(name: String): Boolean
+    @JsName("get")
+    fun getEncoded(name: String): String?
+    fun has(name: String): Boolean
 }
 
 external interface WebKeyboardEvent {
