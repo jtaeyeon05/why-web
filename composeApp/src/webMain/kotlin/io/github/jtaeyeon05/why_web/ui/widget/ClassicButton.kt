@@ -26,10 +26,10 @@ import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ClassicButton(
+    modifier: Modifier = Modifier,
     focused: Boolean,
     onClick: () -> Unit,
     onFocused: (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "Selection Color Transition")
@@ -59,7 +59,6 @@ fun ClassicButton(
     LocalLayoutConstraints.current.run {
         Surface(
             modifier = modifier
-                .fillMaxWidth()
                 .height(box.buttonHeight)
                 .onPointerEvent(PointerEventType.Enter) { if (onFocused != null) onFocused() }
                 .pointerInput(Unit) {

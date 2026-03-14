@@ -8,11 +8,11 @@ class AppViewModel(initialModel: AppModel = AppModel()) {
     private val _model = MutableStateFlow(initialModel)
     val model: StateFlow<AppModel> = _model
 
-    fun updateTest1(test1: Int) {
-        _model.value = _model.value.copy(test1 = test1)
+    fun updateAvatar(avatar: Int?) {
+        _model.value = _model.value.copy(avatar = avatar)
     }
 
-    fun updateTest2(test2: String) {
-        _model.value = _model.value.copy(test2 = test2)
+    fun updateName(name: Int?) {
+        _model.value = _model.value.copy(name = name)
     }
 }

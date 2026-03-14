@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,10 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.navigation.NavController
+import io.github.jtaeyeon05.why_web.data.Avatar
 import io.github.jtaeyeon05.why_web.navigation.Screen
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 import io.github.jtaeyeon05.why_web.ui.foundation.rememberAnimatedText
-import io.github.jtaeyeon05.why_web.ui.widget.Avatar
 import io.github.jtaeyeon05.why_web.ui.widget.ClassicButton
 import io.github.jtaeyeon05.why_web.ui.widget.MessageBox
 import io.github.jtaeyeon05.why_web.ui.widget.SelectionBox
@@ -97,6 +98,7 @@ fun BoxScope.NotToBeBornScreen(
         ) {
             SelectionBox {
                 ClassicButton(
+                    modifier = Modifier.fillMaxWidth(),
                     focused = true,
                     onClick = { navController.navigate(Screen.Start) },
                 ) {

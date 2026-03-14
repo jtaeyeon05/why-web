@@ -17,24 +17,9 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.em
+import io.github.jtaeyeon05.why_web.data.Avatar
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 
-
-data class Avatar(
-    val avatar: String? = null,
-    val name: String
-) {
-    companion object {
-        val God = Avatar(
-            avatar = "🧞",
-            name = "??"
-        )
-        val System = Avatar(
-            avatar = "💻",
-            name = "시스템"
-        )
-    }
-}
 
 @Composable
 fun MessageBox(

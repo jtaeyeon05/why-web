@@ -3,6 +3,7 @@ package io.github.jtaeyeon05.why_web.ui.screen
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicText
@@ -24,11 +25,11 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import io.github.jtaeyeon05.why_web.buildinfo.BuildInfo
+import io.github.jtaeyeon05.why_web.data.Avatar
 import io.github.jtaeyeon05.why_web.navigation.Screen
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 import io.github.jtaeyeon05.why_web.ui.foundation.rememberAnimatedText
-import io.github.jtaeyeon05.why_web.ui.widget.Avatar
 import io.github.jtaeyeon05.why_web.ui.widget.ClassicButton
 import io.github.jtaeyeon05.why_web.ui.widget.MessageBox
 import io.github.jtaeyeon05.why_web.ui.widget.SelectionBox
@@ -49,16 +50,15 @@ fun BoxScope.StartScreen(
 
         // Selection
         val keyboardManager = LocalKeyboardEventManager.current
-        val selectionLine = 3
         var selection by rememberSaveable { mutableStateOf(0) }
         var selectionScrollTo by rememberSaveable { mutableStateOf(0) }
         LaunchedEffect(Unit) {
             keyboardManager.events.collect { webKeyEvent ->
                 if (webKeyEvent.isUpPressed) {
-                    selection = (selection - 1).coerceAtLeast(0)
+                    selection = (selection - 1).coerceIn(0 ..< 3)
                     selectionScrollTo = selection
                 } else if (webKeyEvent.isDownPressed) {
-                    selection = (selection + 1).coerceAtMost(selectionLine - 1)
+                    selection = (selection + 1).coerceIn(0 ..< 3)
                     selectionScrollTo = selection
                 }
             }
@@ -72,6 +72,7 @@ fun BoxScope.StartScreen(
             line = 2,
         ) {
             ClassicButton(
+                modifier = Modifier.fillMaxWidth(),
                 focused = selection == 0,
                 onClick = { navController.navigate(Screen.Ready) },
                 onFocused = { selection = 0 },
@@ -79,6 +80,7 @@ fun BoxScope.StartScreen(
                 Text("예")
             }
             ClassicButton(
+                modifier = Modifier.fillMaxWidth(),
                 focused = selection == 1,
                 onClick = { navController.navigate(Screen.NotToBeBorn) },
                 onFocused = { selection = 1 },
@@ -86,6 +88,7 @@ fun BoxScope.StartScreen(
                 Text("아니요")
             }
             ClassicButton(
+                modifier = Modifier.fillMaxWidth(),
                 focused = selection == 2,
                 onClick = { /* TODO */ },
                 onFocused = { selection = 2 },
