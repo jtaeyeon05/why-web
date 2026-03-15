@@ -10,9 +10,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.navigation.NavController
 import io.github.jtaeyeon05.why_web.navigation.Screen
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
+import io.github.jtaeyeon05.why_web.ui.foundation.TextSize
 import kotlinx.coroutines.delay
 
 
@@ -22,10 +24,15 @@ fun BoxScope.EarthScreen(
     screen: Screen.Earth,
 ) {
     LocalLayoutConstraints.current.run {
-        // 아직 다 안 만듦
-
         val earth = listOf("🌍", "🌎", "🌏")
         var earthIndex by remember { mutableStateOf(0) }
+
+        val density = LocalDensity.current
+        val earthSize = TextSize(
+            size = this.screen.base * 0.32f,
+            lineHeight = 1f,
+            density = density
+        )
 
         LaunchedEffect(Unit) {
             var count = 0
@@ -51,14 +58,14 @@ fun BoxScope.EarthScreen(
         Text(
             modifier = Modifier.align(Alignment.BottomCenter),
             text = "destination: ${screen.destination}",
-            fontSize = typography.smallFontSize.sp,
-            lineHeight = typography.smallLineHeight.sp,
+            fontSize = typography.small.sp,
+            lineHeight = typography.small.lineSp,
         )
         Text(
             modifier = Modifier.align(Alignment.Center),
             text = earth[earthIndex],
-            fontSize = typography.superLargeFontSize.sp,
-            lineHeight = typography.superLargeLineHeight.sp,
+            fontSize = earthSize.sp,
+            lineHeight = earthSize.lineSp,
         )
     }
 }

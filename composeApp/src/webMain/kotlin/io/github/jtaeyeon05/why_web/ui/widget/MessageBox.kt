@@ -45,7 +45,7 @@ fun MessageBox(
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(typography.mediumLineHeight.dp),
+                        .height(typography.medium.lineDp),
                     text = buildAnnotatedString {
                         withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
                             append("[")
@@ -58,8 +58,8 @@ fun MessageBox(
                             append(" ${avatar.name} ]")
                         }
                     },
-                    fontSize = typography.mediumFontSize.sp,
-                    lineHeight = typography.lineHeight.em,
+                    fontSize = typography.medium.sp,
+                    lineHeight = typography.medium.lineSp,
                     maxLines = 1,
                 )
             }
@@ -67,10 +67,10 @@ fun MessageBox(
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(typography.mediumLineHeight.dp * messageLine),
+                    .height(typography.medium.lineDp * messageLine),
                 text = message,
-                fontSize = typography.mediumFontSize.sp,
-                lineHeight = typography.lineHeight.em,
+                fontSize = typography.medium.sp,
+                lineHeight = typography.medium.lineSp,
                 maxLines = messageLine,
             )
         }

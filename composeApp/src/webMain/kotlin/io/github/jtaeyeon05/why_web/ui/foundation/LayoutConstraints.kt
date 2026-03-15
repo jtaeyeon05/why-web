@@ -33,15 +33,7 @@ class LayoutConstraints private constructor(
         val defaultMessageLine: Int,
         val messageBoxWidth: Dp,
         val messageBoxHeight: (Int?) -> Dp,
-    ) {
-        data class WidthRange(
-            val min: Dp,
-            val max: Dp
-        ) : ClosedRange<Dp> {
-            override val start: Dp get() = min
-            override val endInclusive: Dp get() = max
-        }
-    }
+    )
 
     data class InsetSize(
         val borderWidth: Dp,
@@ -57,39 +49,13 @@ class LayoutConstraints private constructor(
     )
 
     data class TypographySize(
+        val small: TextSize,
+        val medium: TextSize,
+        val large: TextSize,
         val lineHeight: Float,
-        val smallFontSize: FontSize,
-        val smallLineHeight: FontSize,
-        val mediumFontSize: FontSize,
-        val mediumLineHeight: FontSize,
-        val largeFontSize: FontSize,
-        val largeLineHeight: FontSize,
-        val superLargeFontSize: FontSize,
-        val superLargeLineHeight: FontSize,
-    ) {
-        data class FontSize(
-            val sp: TextUnit,
-            val dp: Dp,
-        ) {
-            operator fun times(other: Float): FontSize {
-                return FontSize(
-                    sp = sp * other,
-                    dp = dp * other,
-                )
-            }
-        }
-    }
+    )
 
     companion object {
-        fun fontSize(dp: Dp, density: Density): TypographySize.FontSize {
-            return with (density) {
-                TypographySize.FontSize(
-                    sp = dp.toSp(),
-                    dp = dp
-                )
-            }
-        }
-
         fun from(
             width: Dp,
             height: Dp,
@@ -118,33 +84,39 @@ class LayoutConstraints private constructor(
             val typography = run {
                 val lineHeight = 1.2f
 
-                val small = LayoutConstraints.fontSize(base * 0.02f, density)
-                val medium = LayoutConstraints.fontSize(base * 0.04f, density)
-                val large = LayoutConstraints.fontSize(base * 0.08f, density)
-                val superLarge = LayoutConstraints.fontSize(base * 0.32f, density)
+                val small = TextSize(
+                    size = base * 0.02f,
+                    lineHeight = lineHeight,
+                    density = density,
+                )
+                val medium = TextSize(
+                    size = base * 0.04f,
+                    lineHeight = lineHeight,
+                    density = density,
+                )
+                val large = TextSize(
+                    size = base * 0.08f,
+                    lineHeight = lineHeight,
+                    density = density,
+                )
 
                 TypographySize(
                     lineHeight = lineHeight,
-                    smallFontSize = small,
-                    smallLineHeight = small * lineHeight,
-                    mediumFontSize = medium,
-                    mediumLineHeight = medium * lineHeight,
-                    largeFontSize = large,
-                    largeLineHeight = large * lineHeight,
-                    superLargeFontSize = superLarge,
-                    superLargeLineHeight = superLarge * lineHeight,
+                    small = small,
+                    medium = medium,
+                    large = large,
                 )
             }
 
             val box = run {
-                val buttonHeight = typography.mediumLineHeight.dp + padding.small * 2
+                val buttonHeight = typography.medium.lineDp + padding.small * 2
                 val defaultSelectionLine = 2
                 val defaultMessageLine = 4
 
                 BoxSize(
                     buttonHeight = buttonHeight,
                     defaultSelectionLine = defaultSelectionLine,
-                    selectionBoxWidth = BoxSize.WidthRange(
+                    selectionBoxWidth = WidthRange(
                         min = base * 0.33f,
                         max = base - padding.large * 2,
                     ),
@@ -156,7 +128,7 @@ class LayoutConstraints private constructor(
                     messageBoxWidth = base,
                     messageBoxHeight = { line ->
                         val line = if (line == null || line !in 0 .. 10) defaultMessageLine else line
-                        typography.mediumLineHeight.dp * line + padding.medium * 2 + inset.borderWidth * 2
+                        typography.medium.lineDp * line + padding.medium * 2 + inset.borderWidth * 2
                     },
                 )
             }
@@ -170,6 +142,26 @@ class LayoutConstraints private constructor(
             )
         }
     }
+}
+
+data class WidthRange(
+    val min: Dp,
+    val max: Dp
+) : ClosedRange<Dp> {
+    override val start: Dp get() = min
+    override val endInclusive: Dp get() = max
+}
+
+class TextSize(
+    val size: Dp,
+    val lineHeight: Float,
+    private val density: Density,
+) {
+    val dp: Dp get() = size
+    val sp: TextUnit get() = with(density) { dp.toSp() }
+
+    val lineDp: Dp get() = size * lineHeight
+    val lineSp: TextUnit get() = with(density) { lineDp.toSp() }
 }
 
 @Composable

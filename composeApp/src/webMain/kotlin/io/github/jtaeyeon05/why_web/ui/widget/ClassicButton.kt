@@ -78,9 +78,9 @@ fun ClassicButton(
             ) {
                 val textStyle = LocalTextStyle.current.copy(
                     color = LocalContentColor.current,
-                    fontSize = typography.mediumFontSize.sp,
+                    fontSize = typography.medium.sp,
                     textAlign = TextAlign.Start,
-                    lineHeight = typography.mediumLineHeight.sp,
+                    lineHeight = typography.medium.lineSp,
                 )
 
                 CompositionLocalProvider(
