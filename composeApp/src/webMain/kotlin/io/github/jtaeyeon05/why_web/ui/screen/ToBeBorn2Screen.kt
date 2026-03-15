@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import io.github.jtaeyeon05.why_web.data.Avatar
+import io.github.jtaeyeon05.why_web.navigation.Screen
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 import io.github.jtaeyeon05.why_web.ui.foundation.rememberAnimatedText
@@ -70,7 +71,11 @@ fun BoxScope.ToBeBorn2Screen(
                                 focused = selectionCol == col && selectionRow == row,
                                 onClick = {
                                     viewModel.updateName(col * 2 + row)
-                                    // navController.navigate()
+                                    navController.navigate(
+                                        route = Screen.Earth(
+                                            destination = "IDK UNTIL NOW",
+                                        )
+                                    )
                                 },
                                 onFocused = {
                                     selectionCol = col

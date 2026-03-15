@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 
 
-data class LayoutConstraints(
+class LayoutConstraints private constructor(
     val screen: ScreenSize,
     val box: BoxSize,
     val inset: InsetSize,
@@ -28,9 +28,9 @@ data class LayoutConstraints(
     data class BoxSize(
         val buttonHeight: Dp,
         val defaultSelectionLine: Int,
-        val defaultMessageLine: Int,
         val selectionBoxWidth: WidthRange,
         val selectionBoxHeight: (Int?) -> Dp,
+        val defaultMessageLine: Int,
         val messageBoxWidth: Dp,
         val messageBoxHeight: (Int?) -> Dp,
     ) {
@@ -64,6 +64,8 @@ data class LayoutConstraints(
         val mediumLineHeight: FontSize,
         val largeFontSize: FontSize,
         val largeLineHeight: FontSize,
+        val superLargeFontSize: FontSize,
+        val superLargeLineHeight: FontSize,
     ) {
         data class FontSize(
             val sp: TextUnit,
@@ -116,9 +118,10 @@ data class LayoutConstraints(
             val typography = run {
                 val lineHeight = 1.2f
 
-                val small = LayoutConstraints.fontSize(base * 0.03f, density)
+                val small = LayoutConstraints.fontSize(base * 0.02f, density)
                 val medium = LayoutConstraints.fontSize(base * 0.04f, density)
-                val large = LayoutConstraints.fontSize(base * 0.06f, density)
+                val large = LayoutConstraints.fontSize(base * 0.08f, density)
+                val superLarge = LayoutConstraints.fontSize(base * 0.32f, density)
 
                 TypographySize(
                     lineHeight = lineHeight,
@@ -128,6 +131,8 @@ data class LayoutConstraints(
                     mediumLineHeight = medium * lineHeight,
                     largeFontSize = large,
                     largeLineHeight = large * lineHeight,
+                    superLargeFontSize = superLarge,
+                    superLargeLineHeight = superLarge * lineHeight,
                 )
             }
 
@@ -139,7 +144,6 @@ data class LayoutConstraints(
                 BoxSize(
                     buttonHeight = buttonHeight,
                     defaultSelectionLine = defaultSelectionLine,
-                    defaultMessageLine = defaultMessageLine,
                     selectionBoxWidth = BoxSize.WidthRange(
                         min = base * 0.33f,
                         max = base - padding.large * 2,
@@ -148,6 +152,7 @@ data class LayoutConstraints(
                         val line = if (line == null || line !in 1 .. 10) defaultSelectionLine else line
                         buttonHeight * line + padding.medium * 2 + inset.borderWidth * 2
                     },
+                    defaultMessageLine = defaultMessageLine,
                     messageBoxWidth = base,
                     messageBoxHeight = { line ->
                         val line = if (line == null || line !in 0 .. 10) defaultMessageLine else line

@@ -1,7 +1,7 @@
 package io.github.jtaeyeon05.why_web.ui.foundation
 
 
-data class WebKeyEvent(
+class WebKeyEvent private constructor(
     val key: WebKey,
     val status: WebKeyType
 ) {

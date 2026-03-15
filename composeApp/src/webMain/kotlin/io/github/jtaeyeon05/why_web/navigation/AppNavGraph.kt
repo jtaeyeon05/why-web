@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import io.github.jtaeyeon05.why_web.ui.screen.EarthScreen
 import io.github.jtaeyeon05.why_web.ui.screen.NotFoundScreen
 import io.github.jtaeyeon05.why_web.ui.screen.NotToBeBornScreen
 import io.github.jtaeyeon05.why_web.ui.screen.ReadyScreen
@@ -47,6 +48,14 @@ fun NavGraphBuilder.appNavGraph(
             ToBeBorn2Screen(
                 navController = navController,
                 viewModel = viewModel,
+            )
+        }
+    }
+    composable<Screen.Earth> { backStackEntry ->
+        Box(modifier = Modifier.fillMaxSize()) {
+            EarthScreen(
+                navController = navController,
+                screen = backStackEntry.toRoute<Screen.Earth>(),
             )
         }
     }
