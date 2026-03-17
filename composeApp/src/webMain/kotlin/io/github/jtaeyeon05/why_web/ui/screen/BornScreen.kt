@@ -20,7 +20,7 @@ import io.github.jtaeyeon05.why_web.viewmodel.AppViewModel
 
 
 @Composable
-fun BoxScope.Content1Screen(
+fun BoxScope.BornScreen(
     navController: NavController,
     viewModel: AppViewModel,
 ) {

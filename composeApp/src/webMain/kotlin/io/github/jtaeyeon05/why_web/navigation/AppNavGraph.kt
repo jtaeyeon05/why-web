@@ -7,7 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import io.github.jtaeyeon05.why_web.ui.screen.Content1Screen
+import io.github.jtaeyeon05.why_web.ui.screen.BornScreen
 import io.github.jtaeyeon05.why_web.ui.screen.EarthScreen
 import io.github.jtaeyeon05.why_web.ui.screen.NotFoundScreen
 import io.github.jtaeyeon05.why_web.ui.screen.NotToBeBornScreen
@@ -62,7 +62,7 @@ fun NavGraphBuilder.appNavGraph(
     }
     composable<Screen.Born> {
         Box(modifier = Modifier.fillMaxSize()) {
-            Content1Screen(
+            BornScreen(
                 navController = navController,
                 viewModel = viewModel,
             )
