@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.times
 import androidx.navigation.NavController
 import io.github.jtaeyeon05.why_web.navigation.Screen
+import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 import io.github.jtaeyeon05.why_web.ui.foundation.TextSize
 import kotlinx.coroutines.delay
@@ -118,6 +119,18 @@ fun BoxScope.EarthScreen(
                     }
                 }
                 delay(100)
+            }
+        }
+
+        val keyboardManager = LocalKeyboardEventManager.current
+        LaunchedEffect(Unit) {
+            if (screen.destination == null) return@LaunchedEffect
+            keyboardManager.events.collect { webKeyEvent ->
+                if (webKeyEvent.isConfirmPressed) {
+                    navController.navigate(
+                        route = Screen.fromIdentifier(screen.destination)
+                    )
+                }
             }
         }
 

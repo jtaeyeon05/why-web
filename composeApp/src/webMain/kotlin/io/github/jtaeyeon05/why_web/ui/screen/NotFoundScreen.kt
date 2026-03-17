@@ -5,6 +5,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
@@ -24,11 +29,16 @@ fun BoxScope.NotFoundScreen(
 ) {
     LocalLayoutConstraints.current.run {
         // Message
-        val message = rememberAnimatedText("\"${screen.route}\"라는 주소는 존재하지 않는데?")
+        var textKey by rememberSaveable { mutableStateOf(0) }
+        val message = rememberAnimatedText(
+            text = "\"${screen.route}\"라는 주소는 존재하지 않는데?",
+            key = textKey,
+        )
         MessageBox(
             modifier = Modifier.align(Alignment.BottomCenter),
             message = message,
             avatar = Avatar.System,
+            onReplay = { textKey += 1 },
         )
 
         // Selection

@@ -32,11 +32,16 @@ fun BoxScope.ToBeBorn1Screen(
 ) {
     LocalLayoutConstraints.current.run {
         // Message
-        val message = rememberAnimatedText("그러면 뭐로 태어나시겠습니까?")
+        var textKey by rememberSaveable { mutableStateOf(0) }
+        val message = rememberAnimatedText(
+            text = "그러면 뭐로 태어나시겠습니까?",
+            key = textKey,
+        )
         MessageBox(
             modifier = Modifier.align(Alignment.BottomCenter),
             message = message,
             avatar = Avatar.God,
+            onReplay = { textKey += 1 },
         )
 
         // Selection

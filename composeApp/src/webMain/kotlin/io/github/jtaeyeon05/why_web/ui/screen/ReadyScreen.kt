@@ -29,16 +29,19 @@ fun BoxScope.ReadyScreen(
 ) {
     LocalLayoutConstraints.current.run {
         // Message
+        var textKey by rememberSaveable { mutableStateOf(0) }
         val message = rememberAnimatedText(
-            """
+            text = """
                 꼭 태어나셔야겠습니까?
                 다시 한 번 생각하십시오.
-            """.trimIndent()
+            """.trimIndent(),
+            key = textKey,
         )
         MessageBox(
             modifier = Modifier.align(Alignment.BottomCenter),
             message = message,
             avatar = Avatar.God,
+            onReplay = { textKey += 1 },
         )
 
         // Selection

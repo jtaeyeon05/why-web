@@ -41,11 +41,16 @@ fun BoxScope.StartScreen(
 ) {
     LocalLayoutConstraints.current.run {
         // Message
-        val message = rememberAnimatedText("태어나시겠습니까?")
+        var textKey by rememberSaveable { mutableStateOf(0) }
+        val message = rememberAnimatedText(
+            text = "태어나시겠습니까?",
+            key = textKey,
+        )
         MessageBox(
             modifier = Modifier.align(Alignment.BottomCenter),
             message = message,
             avatar = Avatar.God,
+            onReplay = { textKey += 1 },
         )
 
         // Selection

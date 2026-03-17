@@ -40,6 +40,7 @@ fun BoxScope.Content1Screen(
                 avatar = viewModel.model.value.avatar,
                 name = viewModel.model.value.name,
             ),
+            onReplay = { textsKey += 1 },
         )
 
         // Selection

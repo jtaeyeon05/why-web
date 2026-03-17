@@ -75,11 +75,16 @@ fun BoxScope.NotToBeBornScreen(
         }
 
         // Message
-        val message = rememberAnimatedText("태어나지 않기로 했다!")
+        var textKey by rememberSaveable { mutableStateOf(0) }
+        val message = rememberAnimatedText(
+            text = "태어나지 않기로 했다!",
+            key = textKey,
+        )
         MessageBox(
             modifier = Modifier.align(Alignment.BottomCenter),
             message = message,
             avatar = Avatar.System,
+            onReplay = { textKey += 1 },
         )
 
         // Selection
