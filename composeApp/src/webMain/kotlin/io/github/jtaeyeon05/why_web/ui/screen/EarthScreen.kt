@@ -110,7 +110,7 @@ fun BoxScope.EarthScreen(
                     moonIndex++
                     if (moonIndex == moon.size) moonIndex = 0
                 }
-                if (count == 100) {
+                if (count == 50) {
                     screen.destination?.let {
                         navController.navigate(
                             route = Screen.fromIdentifier(screen.destination)

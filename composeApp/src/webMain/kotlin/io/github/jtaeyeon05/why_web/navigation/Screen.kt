@@ -24,6 +24,9 @@ sealed interface Screen {
     ): Screen
 
     @Serializable
+    data object Born: Screen
+
+    @Serializable
     data object NotToBeBorn: Screen
 
     @Serializable
@@ -37,6 +40,7 @@ sealed interface Screen {
         is ToBeBorn1 -> "toBeBorn1"
         is ToBeBorn2 -> "toBeBorn2"
         is Earth -> "earth"
+        is Born -> "born"
         is NotToBeBorn -> "notToBeBorn"
         is NotFound -> "notFound"
     }
@@ -56,6 +60,7 @@ sealed interface Screen {
                     destination = destination,
                 )
             }
+            "born" -> Born
             "notToBeBorn" -> NotToBeBorn
             "notFound" -> {
                 val route = params?.get("route")

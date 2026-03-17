@@ -14,18 +14,38 @@ fun rememberAnimatedText(
     text: String,
     startDelay: Long = 1_000,
     intervalDelay: Long = 100,
+    key: Any? = Unit,
 ): String {
     var animatedText by rememberSaveable(text) { mutableStateOf("") }
-
-    LaunchedEffect(text, startDelay, intervalDelay) {
+    LaunchedEffect(text, startDelay, intervalDelay, key) {
         animatedText = ""
         delay(startDelay)
-
-        for (i in text.indices) {//TODO
+        for (i in text.indices) {
             animatedText = text.take(i + 1)
             delay(intervalDelay)
         }
     }
+    return animatedText
+}
 
+@Composable
+fun rememberAnimatedText(
+    vararg texts: String,
+    startDelay: Long = 1_000,
+    intervalDelay: Long = 100,
+    key: Any? = Unit,
+): String {
+    val textsKey = texts.contentDeepHashCode()
+    var animatedText by rememberSaveable(textsKey) { mutableStateOf("") }
+    LaunchedEffect(textsKey, startDelay, intervalDelay, key) {
+        animatedText = ""
+        for (text in texts) {
+            delay(startDelay)
+            for (i in text.indices) {
+                animatedText = text.take(i + 1)
+                delay(intervalDelay)
+            }
+        }
+    }
     return animatedText
 }

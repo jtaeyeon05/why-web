@@ -45,6 +45,7 @@ suspend fun NavController.bindBrowserHash(
                     screen.destination?.let { screenQueryMap["destination"] = screen.destination }
                     screen.identifier()
                 }
+                destination.hasRoute<Screen.Born>() -> Screen.Born.identifier()
                 destination.hasRoute<Screen.NotToBeBorn>() -> Screen.NotToBeBorn.identifier()
                 destination.hasRoute<Screen.NotFound>() -> {
                     val screen = entry.toRoute<Screen.NotFound>()
