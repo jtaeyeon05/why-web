@@ -95,7 +95,7 @@ fun BoxScope.StartScreen(
             ClassicButton(
                 modifier = Modifier.fillMaxWidth(),
                 focused = selection == 2,
-                onClick = { /* TODO */ },
+                onClick = { navController.navigate(Screen.EasterEgg1) },
                 onFocused = { selection = 2 },
             ) {
                 Text("!!!")

@@ -30,6 +30,12 @@ sealed interface Screen {
     data object NotToBeBorn: Screen
 
     @Serializable
+    data object EasterEgg1: Screen
+
+    @Serializable
+    data object EasterEgg2: Screen
+
+    @Serializable
     data class NotFound(
         val route: String = "???",
     ): Screen
@@ -42,6 +48,10 @@ sealed interface Screen {
         is Earth -> "earth"
         is Born -> "born"
         is NotToBeBorn -> "notToBeBorn"
+        is EasterEgg1
+            -> listOf("eeeastrgg1", "gGiMZziPPokgeunBHap", "wa_gorapaduck", "._..-.._-__-_._.-.._-.__-._-._..-._..-_._-_..-__-.__-.-.__", "bozovaetteoli", "byeongmucheong").random()
+        is EasterEgg2
+            -> listOf("eeeastrgg2", "a-too-long-url-might-be-bad-for-the-user-experience", "gong-gi-cheong-jeong-gi-pil-teo", "noraebureulre", "ro__").random()
         is NotFound -> "notFound"
     }
 
@@ -62,6 +72,10 @@ sealed interface Screen {
             }
             "born" -> Born
             "notToBeBorn" -> NotToBeBorn
+            "eeeastrgg1", "gGiMZziPPokgeunBHap", "wa_gorapaduck", "._..-.._-__-_._.-.._-.__-._-._..-._..-_._-_..-__-.__-.-.__", "bozovaetteoli", "byeongmucheong"
+                 -> EasterEgg1
+            "eeeastrgg2", "a-too-long-url-might-be-bad-for-the-user-experience", "gong-gi-cheong-jeong-gi-pil-teo", "noraebureulre", "ro__"
+                -> EasterEgg2
             "notFound" -> {
                 val route = params?.get("route")
                 NotFound(route = route ?: "???")

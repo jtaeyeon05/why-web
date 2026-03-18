@@ -9,6 +9,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import io.github.jtaeyeon05.why_web.ui.screen.BornScreen
 import io.github.jtaeyeon05.why_web.ui.screen.EarthScreen
+import io.github.jtaeyeon05.why_web.ui.screen.EasterEgg1Screen
+import io.github.jtaeyeon05.why_web.ui.screen.EasterEgg2Screen
 import io.github.jtaeyeon05.why_web.ui.screen.NotFoundScreen
 import io.github.jtaeyeon05.why_web.ui.screen.NotToBeBornScreen
 import io.github.jtaeyeon05.why_web.ui.screen.ReadyScreen
@@ -73,6 +75,16 @@ fun NavGraphBuilder.appNavGraph(
             NotToBeBornScreen(
                 navController = navController,
             )
+        }
+    }
+    composable<Screen.EasterEgg1> {
+        Box(modifier = Modifier.fillMaxSize()) {
+            EasterEgg1Screen()
+        }
+    }
+    composable<Screen.EasterEgg2> {
+        Box(modifier = Modifier.fillMaxSize()) {
+            EasterEgg2Screen()
         }
     }
     composable<Screen.NotFound> { backStackEntry ->
