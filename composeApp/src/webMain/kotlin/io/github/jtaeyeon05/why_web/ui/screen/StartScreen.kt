@@ -56,15 +56,15 @@ fun BoxScope.StartScreen(
         // Selection
         val keyboardManager = LocalKeyboardEventManager.current
         var selection by rememberSaveable { mutableStateOf(0) }
-        var selectionScrollTo by rememberSaveable { mutableStateOf(0) }
+        var selectionScrollTo by rememberSaveable { mutableStateOf(0f) }
         LaunchedEffect(Unit) {
             keyboardManager.events.collect { webKeyEvent ->
                 if (webKeyEvent.isUpPressed) {
                     selection = (selection - 1).coerceIn(0 ..< 3)
-                    selectionScrollTo = selection
+                    selectionScrollTo = selection.toFloat()
                 } else if (webKeyEvent.isDownPressed) {
                     selection = (selection + 1).coerceIn(0 ..< 3)
-                    selectionScrollTo = selection
+                    selectionScrollTo = selection.toFloat()
                 }
             }
         }

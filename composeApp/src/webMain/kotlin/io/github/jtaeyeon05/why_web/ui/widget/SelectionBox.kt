@@ -44,7 +44,7 @@ fun SelectionBox(
 @Composable
 fun SelectionBox(
     modifier: Modifier = Modifier,
-    scrollTo: Int = 0,  // 변경시 해당 버튼으로 스크롤 이동
+    scrollTo: Float = 0f,  // 변경시 해당 버튼으로 스크롤 이동
     line: Int = LocalLayoutConstraints.current.box.defaultSelectionLine,  // 한 번에 보이는 버튼 개수
     content: @Composable ColumnScope.() -> Unit,
 ) {
@@ -52,7 +52,7 @@ fun SelectionBox(
         val scrollState = rememberScrollState()
         val itemHeightPx = with(LocalDensity.current) { box.buttonHeight.toPx() }
         LaunchedEffect(scrollTo) {
-            scrollState.scrollTo((itemHeightPx * (scrollTo - 1).coerceAtLeast(0)).toInt())
+            scrollState.scrollTo((itemHeightPx * (scrollTo - 1f).coerceAtLeast(0f)).toInt())
         }
 
         Column(

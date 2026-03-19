@@ -1,11 +1,159 @@
 package io.github.jtaeyeon05.why_web.ui.screen
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.times
+import com.parkwoocheol.composewebview.ComposeWebView
+import com.parkwoocheol.composewebview.DarkMode
+import com.parkwoocheol.composewebview.WebViewSettings
+import com.parkwoocheol.composewebview.rememberWebViewController
+import com.parkwoocheol.composewebview.rememberWebViewState
+import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
+import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
+import io.github.jtaeyeon05.why_web.ui.widget.ClassicButton
+import io.github.jtaeyeon05.why_web.ui.widget.SelectionBox
+import io.github.jtaeyeon05.why_web.util.enableIframesToAutoplay
+import io.github.jtaeyeon05.why_web.util.specialString
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 
 @Composable
 fun BoxScope.EasterEgg2Screen() {
-    Text("EasterEgg2")
+    LocalLayoutConstraints.current.run {
+        val webWidth = screen.base - 2 * padding.large
+        val webHeight = webWidth * 3.0f / 4.0f
+
+        val webState = rememberWebViewState(url = "https://www.youtube.com/embed/u2erFUojbAA?autoplay=1&controls=0")
+        val webController = rememberWebViewController()
+
+        Box(
+            modifier = Modifier
+                .width(webWidth)
+                .height(webHeight)
+                .align(Alignment.Center)
+                .border(
+                    width = inset.borderWidth,
+                    color = LocalContentColor.current,
+                )
+                .background(
+                    color = LocalContentColor.current
+                        .copy(alpha = 0.25f)
+                        .compositeOver(MaterialTheme.colorScheme.background),
+                )
+        ) {
+            Text(
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(padding.large),
+                text = "WebView",
+                fontSize = typography.large.sp,
+                lineHeight = typography.large.lineSp,
+                fontWeight = FontWeight.Bold,
+            )
+            ComposeWebView(
+                modifier = Modifier
+                    .padding(inset.borderWidth)
+                    .fillMaxSize(),
+                state = webState,
+                controller = webController,
+                settings = WebViewSettings(
+                    javaScriptEnabled = true,
+                    domStorageEnabled = true,
+                    darkMode = DarkMode.DARK,
+                ),
+                onCreated = {
+                    enableIframesToAutoplay()
+                }
+            )
+        }
+
+        // Selection
+        val keyboardManager = LocalKeyboardEventManager.current
+        var selection by rememberSaveable { mutableStateOf(1) }
+        var selectionScrollTo by rememberSaveable { mutableStateOf(1.5f) }
+        LaunchedEffect(Unit) {
+            keyboardManager.events.collect { webKeyEvent ->
+                if (webKeyEvent.isUpPressed) {
+                    selection = (selection - 1).coerceIn(0 ..< 3)
+                    selectionScrollTo = selection.toFloat()
+                } else if (webKeyEvent.isDownPressed) {
+                    selection = (selection + 1).coerceIn(0 ..< 3)
+                    selectionScrollTo = selection.toFloat()
+                }
+            }
+        }
+
+        SelectionBox(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            scrollTo = selectionScrollTo,
+            line = 2,
+        ) {
+            ClassicButton(
+                modifier = Modifier.fillMaxWidth(),
+                focused = selection == 0,
+                onClick = {
+                    // TODO
+                    webController.loadUrl("https://xodus.lol/")
+                    webController.reload()
+                },
+                onFocused = { selection = 0 },
+            ) {
+                Text(
+                    modifier = Modifier.align(Alignment.Center),
+                    text = rememberSaveable { specialString(Random.nextInt(3 .. 6)) },
+                )
+            }
+            ClassicButton(
+                modifier = Modifier.fillMaxWidth(),
+                focused = selection == 1,
+                onClick = {
+                    // TODO
+                    webController.loadUrl("https://xodus.lol/")
+                    webController.reload()
+                },
+                onFocused = { selection = 1 },
+            ) {
+                Text(
+                    modifier = Modifier.align(Alignment.Center),
+                    text = rememberSaveable { specialString(Random.nextInt(3 .. 6)) },
+                )
+            }
+            ClassicButton(
+                modifier = Modifier.fillMaxWidth(),
+                focused = selection == 2,
+                onClick = {
+                    // TODO
+                    webController.loadUrl("https://xodus.lol/")
+                    webController.reload()
+                },
+                onFocused = { selection = 2 },
+            ) {
+                Text(
+                    modifier = Modifier.align(Alignment.Center),
+                    text = rememberSaveable { specialString(Random.nextInt(3 .. 6)) },
+                )
+            }
+        }
+    }
 }

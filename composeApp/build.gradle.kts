@@ -9,7 +9,7 @@ plugins {
     kotlin("plugin.serialization") version "2.3.0"
 }
 
-val version = "0.0.21B"
+val version = "0.0.22B"
 val buildInfoPackage = "io.github.jtaeyeon05.why_web.buildinfo"
 val buildInfoDir = layout.buildDirectory.dir("generated/sources/buildInfo/kotlin")
 
@@ -79,6 +79,7 @@ kotlin {
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.2")
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
             implementation("io.github.vinceglb:confettikit:0.7.0")
+            implementation("io.github.parkwoocheol:compose-webview:1.8.1")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

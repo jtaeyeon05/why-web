@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
@@ -30,7 +31,7 @@ fun ClassicButton(
     focused: Boolean,
     onClick: () -> Unit,
     onFocused: (() -> Unit)? = null,
-    content: @Composable () -> Unit,
+    content: @Composable BoxScope.() -> Unit,
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "Selection Color Transition")
     val selectionColor by infiniteTransition.animateColor(
@@ -81,11 +82,15 @@ fun ClassicButton(
                     fontSize = typography.medium.sp,
                     textAlign = TextAlign.Start,
                     lineHeight = typography.medium.lineSp,
+                    lineHeightStyle = LineHeightStyle(
+                        alignment = LineHeightStyle.Alignment.Center,
+                        trim = LineHeightStyle.Trim.None
+                    ),
                 )
 
                 CompositionLocalProvider(
                     LocalTextStyle provides textStyle,
-                    content = content
+                    content = { content() }
                 )
             }
         }

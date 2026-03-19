@@ -18,3 +18,15 @@ fun showCompose() {
 fun stopLoader() {
     js("if (window.stopLoader) window.stopLoader();")
 }
+
+fun enableIframesToAutoplay() {
+    js(
+        """
+            const iframes = document.querySelectorAll("iframe");
+            iframes.forEach(iframe => {
+                iframe.setAttribute("allow", "autoplay");
+                console.log("YouTube iframe allow attribute injected!");
+            });
+        """
+    )
+}
