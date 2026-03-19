@@ -45,3 +45,7 @@ html, body {
     align-items: center;
     z-index: 1;
 }
+
+.webview-container {
+    z-index: 3;
+}
