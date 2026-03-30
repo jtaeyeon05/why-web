@@ -7,6 +7,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.Text
@@ -19,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.times
 import androidx.navigation.NavController
@@ -158,7 +160,18 @@ fun BoxScope.EarthScreen(
             lineHeight = moonSize.lineSp,
         )
         Text(
-            modifier = Modifier.align(Alignment.Center),
+            modifier = Modifier
+                .align(Alignment.Center)
+                .pointerInput(Unit) {
+                    if (screen.destination == null) return@pointerInput
+                    detectTapGestures(
+                        onTap = {
+                            navController.navigate(
+                                route = Screen.fromIdentifier(screen.destination)
+                            )
+                        },
+                    )
+                },
             text = earth[earthIndex],
             fontSize = earthSize.sp,
             lineHeight = earthSize.lineSp,
