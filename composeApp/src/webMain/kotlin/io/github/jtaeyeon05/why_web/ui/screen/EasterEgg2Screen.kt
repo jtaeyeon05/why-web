@@ -41,6 +41,7 @@ import kotlin.random.nextInt
 @Composable
 fun BoxScope.EasterEgg2Screen() {
     LocalLayoutConstraints.current.run {
+        // WebView
         val (webWidth, webHeight) = run {
             val webHeightMax = screen.height - 2 * box.selectionBoxHeight(2) - 2 * padding.large
 
