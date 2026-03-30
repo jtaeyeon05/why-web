@@ -41,8 +41,18 @@ import kotlin.random.nextInt
 @Composable
 fun BoxScope.EasterEgg2Screen() {
     LocalLayoutConstraints.current.run {
-        val webWidth = screen.base - 2 * padding.large
-        val webHeight = webWidth * 3.0f / 4.0f
+        val (webWidth, webHeight) = run {
+            val webHeightMax = screen.height - 2 * box.selectionBoxHeight(2) - 2 * padding.large
+
+            var webWidth = screen.base - 2 * padding.large
+            var webHeight = webWidth * 3.0f / 4.0f
+            if (webHeight > webHeightMax) {
+                webWidth = webHeightMax * 4.0f / 3.0f
+                webHeight = webHeightMax
+            }
+
+            Pair(webWidth, webHeight)
+        }
 
         val webState = rememberWebViewState(url = "https://www.youtube.com/embed/u2erFUojbAA?autoplay=1&controls=0")
         val webController = rememberWebViewController()
@@ -129,7 +139,10 @@ fun BoxScope.EasterEgg2Screen() {
                 focused = selection == 1,
                 onClick = {
                     // TODO
-                    webController.loadUrl("https://xodus.lol/")
+                    val urlList = listOf(
+                        "https://xodus.lol/",
+                    )
+                    webController.loadUrl(urlList.random())
                     webController.reload()
                 },
                 onFocused = { selection = 1 },
