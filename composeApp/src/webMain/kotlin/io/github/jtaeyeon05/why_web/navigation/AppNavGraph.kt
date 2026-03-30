@@ -17,6 +17,7 @@ import io.github.jtaeyeon05.why_web.ui.screen.ReadyScreen
 import io.github.jtaeyeon05.why_web.ui.screen.StartScreen
 import io.github.jtaeyeon05.why_web.ui.screen.ToBeBorn1Screen
 import io.github.jtaeyeon05.why_web.ui.screen.ToBeBorn2Screen
+import io.github.jtaeyeon05.why_web.ui.screen.WebScreen
 import io.github.jtaeyeon05.why_web.viewmodel.AppViewModel
 
 
@@ -66,6 +67,13 @@ fun NavGraphBuilder.appNavGraph(
         Box(modifier = Modifier.fillMaxSize()) {
             BornScreen(
                 navController = navController,
+                viewModel = viewModel,
+            )
+        }
+    }
+    composable<Screen.Web> {
+        Box(modifier = Modifier.fillMaxSize()) {
+            WebScreen(
                 viewModel = viewModel,
             )
         }

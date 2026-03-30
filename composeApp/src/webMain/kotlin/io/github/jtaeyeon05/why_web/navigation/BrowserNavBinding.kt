@@ -46,6 +46,7 @@ suspend fun NavController.bindBrowserHash(
                     screen.identifier()
                 }
                 destination.hasRoute<Screen.Born>() -> Screen.Born.identifier()
+                destination.hasRoute<Screen.Web>() -> Screen.Web.identifier()
                 destination.hasRoute<Screen.NotToBeBorn>() -> Screen.NotToBeBorn.identifier()
                 destination.hasRoute<Screen.EasterEgg1>() -> Screen.EasterEgg1.identifier()
                 destination.hasRoute<Screen.EasterEgg2>() -> Screen.EasterEgg2.identifier()

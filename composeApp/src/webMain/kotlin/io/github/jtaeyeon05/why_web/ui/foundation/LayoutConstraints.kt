@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
 
 
 class LayoutConstraints private constructor(
@@ -61,7 +62,7 @@ class LayoutConstraints private constructor(
             height: Dp,
             density: Density,
         ): LayoutConstraints {
-            val base = if (width <= height) width else height * 1.25f
+            val base = if (width <= height) width else min(width, height * 1.25f)
 
             val screen = ScreenSize(
                 base = base,

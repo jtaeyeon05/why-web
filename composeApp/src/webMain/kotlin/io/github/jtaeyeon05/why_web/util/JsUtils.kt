@@ -30,3 +30,18 @@ fun enableIframesToAutoplay() {
         """
     )
 }
+
+fun focusIframe() {
+    js(
+        """
+            const iframes = document.querySelectorAll("iframe");
+            iframes.forEach(iframe => {
+                iframe.focus();
+                if (iframe.contentWindow) {
+                    iframe.contentWindow.focus();
+                }
+                console.log("Iframe focused via JS!");
+            });
+        """
+    )
+}

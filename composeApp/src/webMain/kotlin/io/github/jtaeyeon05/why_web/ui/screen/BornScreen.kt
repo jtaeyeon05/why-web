@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import io.github.jtaeyeon05.why_web.data.Avatar
+import io.github.jtaeyeon05.why_web.navigation.Screen
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 import io.github.jtaeyeon05.why_web.ui.foundation.rememberAnimatedText
@@ -79,17 +80,10 @@ fun BoxScope.BornScreen(
             ClassicButton(
                 modifier = Modifier.fillMaxWidth(),
                 focused = selection == 1,
-                onClick = {
-                    // TODO
-                    texts = arrayOf(
-                        "이딴 프로젝트에 더 시간 쓰기 아깝다고 한다!",
-                        "어떤 행동을 할까?"
-                    )
-                    textsKey += 1
-                },
+                onClick = { navController.navigate(Screen.Web) },
                 onFocused = { selection = 1 },
             ) {
-                Text("귀찮아서 개발하지 않았다!")
+                Text("웹 서핑 하기")
             }
             ClassicButton(
                 modifier = Modifier.fillMaxWidth(),

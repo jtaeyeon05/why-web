@@ -27,6 +27,9 @@ sealed interface Screen {
     data object Born: Screen
 
     @Serializable
+    data object Web: Screen
+
+    @Serializable
     data object NotToBeBorn: Screen
 
     @Serializable
@@ -47,6 +50,7 @@ sealed interface Screen {
         is ToBeBorn2 -> "toBeBorn2"
         is Earth -> "earth"
         is Born -> "born"
+        is Web -> "web"
         is NotToBeBorn -> "notToBeBorn"
         is EasterEgg1
             -> listOf("eeeastrgg1", "gGiMZziPPokgeunBHap", "wa_gorapaduck", "._..-.._-__-_._.-.._-.__-._-._..-._..-_._-_..-__-.__-.-.__", "bozovaetteoli", "byeongmucheong").random()
@@ -71,6 +75,7 @@ sealed interface Screen {
                 )
             }
             "born" -> Born
+            "web" -> Web
             "notToBeBorn" -> NotToBeBorn
             "eeeastrgg1", "gGiMZziPPokgeunBHap", "wa_gorapaduck", "._..-.._-__-_._.-.._-.__-._-._..-._..-_._-_..-__-.__-.-.__", "bozovaetteoli", "byeongmucheong"
                  -> EasterEgg1
