@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -36,10 +37,12 @@ import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 import io.github.jtaeyeon05.why_web.ui.foundation.rememberAnimatedText
 import io.github.jtaeyeon05.why_web.ui.widget.MessageBox
-import io.github.jtaeyeon05.why_web.util.focusIframe
+import io.github.jtaeyeon05.why_web.util.BrowserWindow
+import io.github.jtaeyeon05.why_web.util.focusIframes
 import io.github.jtaeyeon05.why_web.viewmodel.AppViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 
 @Composable
@@ -49,6 +52,30 @@ fun BoxScope.WebScreen(
     LocalLayoutConstraints.current.run {
         val keyboardManager = LocalKeyboardEventManager.current
         val scope = rememberCoroutineScope()
+
+        var isWebShowing by rememberSaveable { mutableStateOf(false) }
+
+        LaunchedEffect(Unit) {
+            keyboardManager.events.collect { webKeyEvent ->
+                if (webKeyEvent.isConfirmPressed) {
+                    keyboardManager.kill()
+                    isWebShowing = true
+                }
+            }
+        }
+        DisposableEffect(Unit) {
+            val job = scope.launch {
+                delay(2_500)
+                if (!isWebShowing) {
+                    keyboardManager.kill()
+                    isWebShowing = true
+                }
+            }
+            onDispose {
+                job.cancel()
+                keyboardManager.revive()
+            }
+        }
 
         // Message
         var texts by rememberSaveable { mutableStateOf(arrayOf("웹 서핑을 할 것이다!", "", "... ...")) }
@@ -68,22 +95,8 @@ fun BoxScope.WebScreen(
         val webWidth = screen.base - 2 * padding.large
         val webHeight = screen.height - 2 * box.messageBoxHeight(2) - 2 * padding.large
 
-        val webState = rememberWebViewState(url = "./")
+        val webState = rememberWebViewState(url = BrowserWindow.location.origin + "/?iframe_seed=${Random.nextInt()}")
         val webController = rememberWebViewController()
-
-        var isWebShowing by rememberSaveable { mutableStateOf(false) }
-
-        DisposableEffect(Unit) {
-            val job = scope.launch {
-                delay(2_500)
-                keyboardManager.kill()
-                isWebShowing = true
-            }
-            onDispose {
-                job.cancel()
-                keyboardManager.revive()
-            }
-        }
 
         AnimatedVisibility(
             visible = isWebShowing,
@@ -128,7 +141,7 @@ fun BoxScope.WebScreen(
                         darkMode = DarkMode.DARK,
                     ),
                     onCreated = {
-                        focusIframe()
+                        focusIframes()
                     },
                 )
             }

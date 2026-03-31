@@ -30,6 +30,7 @@ external interface WebKeyboardEvent {
 }
 
 external interface WindowLocation {
+    val origin: String
     val hash: String
 }
 

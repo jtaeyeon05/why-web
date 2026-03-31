@@ -31,7 +31,7 @@ fun enableIframesToAutoplay() {
     )
 }
 
-fun focusIframe() {
+fun focusIframes() {
     js(
         """
             const iframes = document.querySelectorAll("iframe");
