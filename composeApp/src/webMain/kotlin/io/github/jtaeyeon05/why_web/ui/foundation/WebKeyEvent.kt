@@ -14,6 +14,7 @@ class WebKeyEvent private constructor(
     )
 
     val isConfirmPressed get() = isAnyPressed(WebKey.ENTER, WebKey.NUMPAD_ENTER, WebKey.SPACE)
+    val isCancelPressed get() = isAnyPressed(WebKey.ESCAPE, WebKey.BACKSPACE, WebKey.KEY_X)
     val isUpPressed get() = isAnyPressed(WebKey.ARROW_UP, WebKey.KEY_W, WebKey.NUMPAD_8)
     val isDownPressed get() = isAnyPressed(WebKey.ARROW_DOWN, WebKey.KEY_S, WebKey.NUMPAD_2)
     val isLeftPressed get() = isAnyPressed(WebKey.ARROW_LEFT, WebKey.KEY_A, WebKey.NUMPAD_4)

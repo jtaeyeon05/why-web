@@ -2,14 +2,17 @@ package io.github.jtaeyeon05.why_web.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,8 +24,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.times
+import androidx.navigation.NavController
 import com.parkwoocheol.composewebview.ComposeWebView
 import com.parkwoocheol.composewebview.DarkMode
 import com.parkwoocheol.composewebview.WebViewSettings
@@ -39,8 +46,12 @@ import kotlin.random.nextInt
 
 
 @Composable
-fun BoxScope.EasterEgg2Screen() {
+fun BoxScope.EasterEgg2Screen(
+    navController: NavController,
+) {
     LocalLayoutConstraints.current.run {
+        val keyboardManager = LocalKeyboardEventManager.current
+
         // WebView
         val (webWidth, webHeight) = run {
             val webHeightMax = screen.height - 2 * box.selectionBoxHeight(2) - 2 * padding.large
@@ -95,12 +106,48 @@ fun BoxScope.EasterEgg2Screen() {
                 ),
                 onCreated = {
                     enableIframesToAutoplay()
+                },
+            )
+        }
+
+        // Close
+        LaunchedEffect(Unit) {
+            keyboardManager.events.collect { webKeyEvent ->
+                if (webKeyEvent.isCancelPressed) {
+                    navController.popBackStack()
                 }
+            }
+        }
+
+        Box(
+            modifier = Modifier
+                .size(box.buttonHeight)
+                .align(Alignment.TopStart)
+                .background(MaterialTheme.colorScheme.background)
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onTap = {
+                            navController.popBackStack()
+                        },
+                    )
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "X",
+                style = LocalTextStyle.current.copy(
+                    fontSize = typography.medium.sp,
+                    textAlign = TextAlign.Center,
+                    lineHeight = typography.medium.lineSp,
+                    lineHeightStyle = LineHeightStyle(
+                        alignment = LineHeightStyle.Alignment.Center,
+                        trim = LineHeightStyle.Trim.None
+                    ),
+                ),
             )
         }
 
         // Selection
-        val keyboardManager = LocalKeyboardEventManager.current
         var selection by rememberSaveable { mutableStateOf(1) }
         var selectionScrollTo by rememberSaveable { mutableStateOf(1.5f) }
         LaunchedEffect(Unit) {
@@ -123,11 +170,7 @@ fun BoxScope.EasterEgg2Screen() {
             ClassicButton(
                 modifier = Modifier.fillMaxWidth(),
                 focused = selection == 0,
-                onClick = {
-                    // TODO
-                    webController.loadUrl("https://xodus.lol/")
-                    webController.reload()
-                },
+                onClick = { /* TODO */ },
                 onFocused = { selection = 0 },
             ) {
                 Text(
@@ -139,9 +182,13 @@ fun BoxScope.EasterEgg2Screen() {
                 modifier = Modifier.fillMaxWidth(),
                 focused = selection == 1,
                 onClick = {
-                    // TODO
                     val urlList = listOf(
-                        "https://xodus.lol/",
+                        "https://www.youtube.com/embed/eMGRt0A9Yns?autoplay=1&controls=0",
+                        "https://www.youtube.com/embed/vR21RMEV0fg?autoplay=1&controls=0",
+                        "https://www.youtube.com/embed/6zAkiKy76xs?autoplay=1&controls=0",
+                        "https://www.youtube.com/embed/5mGuCdlCcNM?autoplay=1&controls=0",
+                        "https://www.youtube.com/embed/3e6motL4QMc?autoplay=1&controls=0",
+                        "https://www.youtube.com/embed/tcHaMWktCYE?autoplay=1&controls=0",
                     )
                     webController.loadUrl(urlList.random())
                     webController.reload()
@@ -156,11 +203,7 @@ fun BoxScope.EasterEgg2Screen() {
             ClassicButton(
                 modifier = Modifier.fillMaxWidth(),
                 focused = selection == 2,
-                onClick = {
-                    // TODO
-                    webController.loadUrl("https://xodus.lol/")
-                    webController.reload()
-                },
+                onClick = { /* TODO */ },
                 onFocused = { selection = 2 },
             ) {
                 Text(

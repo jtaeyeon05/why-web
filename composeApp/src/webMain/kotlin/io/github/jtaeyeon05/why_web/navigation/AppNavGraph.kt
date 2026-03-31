@@ -87,12 +87,16 @@ fun NavGraphBuilder.appNavGraph(
     }
     composable<Screen.EasterEgg1> {
         Box(modifier = Modifier.fillMaxSize()) {
-            EasterEgg1Screen()
+            EasterEgg1Screen(
+                navController = navController,
+            )
         }
     }
     composable<Screen.EasterEgg2> {
         Box(modifier = Modifier.fillMaxSize()) {
-            EasterEgg2Screen()
+            EasterEgg2Screen(
+                navController = navController,
+            )
         }
     }
     composable<Screen.NotFound> { backStackEntry ->
