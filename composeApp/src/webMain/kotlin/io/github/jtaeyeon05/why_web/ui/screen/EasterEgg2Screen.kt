@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -37,12 +38,17 @@ import com.parkwoocheol.composewebview.rememberWebViewController
 import com.parkwoocheol.composewebview.rememberWebViewState
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
+import io.github.jtaeyeon05.why_web.ui.widget.BouncingEmoji
 import io.github.jtaeyeon05.why_web.ui.widget.ClassicButton
 import io.github.jtaeyeon05.why_web.ui.widget.SelectionBox
+import io.github.jtaeyeon05.why_web.util.emojiGroups
 import io.github.jtaeyeon05.why_web.util.enableIframesToAutoplay
+import io.github.jtaeyeon05.why_web.util.nextGaussian
 import io.github.jtaeyeon05.why_web.util.specialString
+import kotlin.math.PI
 import kotlin.random.Random
 import kotlin.random.nextInt
+import kotlin.run
 
 
 @Composable
@@ -51,6 +57,27 @@ fun BoxScope.EasterEgg2Screen(
 ) {
     LocalLayoutConstraints.current.run {
         val keyboardManager = LocalKeyboardEventManager.current
+
+        // BouncingEmoji
+        val emojiGroup = remember { emojiGroups.random() }
+        repeat(50) {
+            BouncingEmoji(
+                emoji = remember { emojiGroup.random() },
+                initialDirection = remember {
+                    Random.nextGaussian(
+                        mean = 0.5 * PI,
+                        stdDev = 0.5,
+                        min = -0.5 * PI,
+                        max = 1.5 * PI
+                    ).toFloat()
+                },
+                initialMagnitude = remember {
+                    screen.base * (0.015f + 0.015f * Random.nextFloat())
+                },
+                accelDirection = 1.5f * PI.toFloat(),
+                accelMagnitude = screen.base * 0.0003f,
+            )
+        }
 
         // WebView
         val (webWidth, webHeight) = run {
