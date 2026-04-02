@@ -67,15 +67,10 @@ fun BoxScope.BornScreen(
                 focused = selection == 0,
                 onClick = {
                     // TODO
-                    texts = arrayOf(
-                        "이딴 프로젝트에 더 시간 쓰기 아깝다고 한다!",
-                        "어떤 행동을 할까?"
-                    )
-                    textsKey += 1
                 },
                 onFocused = { selection = 0 },
             ) {
-                Text("귀찮아서 개발하지 않았다!")
+                Text("TODO")
             }
             ClassicButton(
                 modifier = Modifier.fillMaxWidth(),
@@ -89,9 +84,10 @@ fun BoxScope.BornScreen(
                 modifier = Modifier.fillMaxWidth(),
                 focused = selection == 2,
                 onClick = {
-                    // TODO
                     texts = arrayOf(
                         "이딴 프로젝트에 더 시간 쓰기 아깝다고 한다!",
+                        "이 프로젝트에만 벌써 30개가 넘는 코드 파일에 3,000줄이 넘는 코드를 작성했다!",
+                        "빨리 버리고 실용적인 프로젝트로 넘어가야겠다.",
                         "어떤 행동을 할까?"
                     )
                     textsKey += 1
