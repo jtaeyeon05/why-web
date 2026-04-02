@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -38,6 +39,7 @@ import com.parkwoocheol.composewebview.rememberWebViewController
 import com.parkwoocheol.composewebview.rememberWebViewState
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
+import io.github.jtaeyeon05.why_web.ui.foundation.WebKey
 import io.github.jtaeyeon05.why_web.ui.widget.BouncingEmoji
 import io.github.jtaeyeon05.why_web.ui.widget.ClassicButton
 import io.github.jtaeyeon05.why_web.ui.widget.SelectionBox
@@ -59,24 +61,27 @@ fun BoxScope.EasterEgg2Screen(
         val keyboardManager = LocalKeyboardEventManager.current
 
         // BouncingEmoji
-        val emojiGroup = remember { emojiGroups.random() }
-        repeat(50) {
-            BouncingEmoji(
-                emoji = remember { emojiGroup.random() },
-                initialDirection = remember {
-                    Random.nextGaussian(
-                        mean = 0.5 * PI,
-                        stdDev = 0.5,
-                        min = -0.5 * PI,
-                        max = 1.5 * PI
-                    ).toFloat()
-                },
-                initialMagnitude = remember {
-                    screen.base * (0.015f + 0.015f * Random.nextFloat())
-                },
-                accelDirection = 1.5f * PI.toFloat(),
-                accelMagnitude = screen.base * 0.0003f,
-            )
+        var bouncingEmojiKey by rememberSaveable { mutableStateOf(0) }
+        key(bouncingEmojiKey) {
+            val emojiGroup = remember { emojiGroups.random() }
+            repeat(50) {
+                BouncingEmoji(
+                    emoji = remember { emojiGroup.random() },
+                    initialDirection = remember {
+                        Random.nextGaussian(
+                            mean = 0.5 * PI,
+                            stdDev = 0.75,
+                            min = -0.5 * PI,
+                            max = 1.5 * PI
+                        ).toFloat()
+                    },
+                    initialMagnitude = remember {
+                        screen.base * (0.015f + 0.015f * Random.nextFloat())
+                    },
+                    accelDirection = 1.5f * PI.toFloat(),
+                    accelMagnitude = screen.base * 0.0003f,
+                )
+            }
         }
 
         // WebView
@@ -186,6 +191,9 @@ fun BoxScope.EasterEgg2Screen(
                     selection = (selection + 1).coerceIn(0 ..< 3)
                     selectionScrollTo = selection.toFloat()
                 }
+                if (webKeyEvent.isAnyPressed(WebKey.SHIFT_LEFT, WebKey.SHIFT_RIGHT)) {
+                    bouncingEmojiKey += 1
+                }
             }
         }
 
@@ -230,7 +238,7 @@ fun BoxScope.EasterEgg2Screen(
             ClassicButton(
                 modifier = Modifier.fillMaxWidth(),
                 focused = selection == 2,
-                onClick = { /* TODO */ },
+                onClick = { bouncingEmojiKey += 1 },
                 onFocused = { selection = 2 },
             ) {
                 Text(

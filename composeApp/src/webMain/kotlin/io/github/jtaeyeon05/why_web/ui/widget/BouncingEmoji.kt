@@ -53,7 +53,7 @@ fun BoxScope.BouncingEmoji(
             var isDragging by remember { mutableStateOf(false) }
 
             val isAlive by derivedStateOf {
-                val safeArea = 0.50f * screen.base
+                val safeArea = screen.base
                 var result = true
 
                 // 상하 검사
