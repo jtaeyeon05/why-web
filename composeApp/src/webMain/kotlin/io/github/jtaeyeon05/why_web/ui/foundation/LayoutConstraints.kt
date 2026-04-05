@@ -27,6 +27,9 @@ class LayoutConstraints private constructor(
     )
 
     data class BoxSize(
+        val smallBox: Dp,
+        val mediumBox: Dp,
+        val largeBox: Dp,
         val buttonHeight: Dp,
         val defaultSelectionLine: Int,
         val selectionBoxWidth: WidthRange,
@@ -38,9 +41,7 @@ class LayoutConstraints private constructor(
 
     data class InsetSize(
         val borderWidth: Dp,
-        val smallRound: Dp,
-        val mediumRound: Dp,
-        val largeRound: Dp,
+        val thinBorderWidth: Dp,
     )
 
     data class PaddingSize(
@@ -73,9 +74,7 @@ class LayoutConstraints private constructor(
             )
             val inset = InsetSize(
                 borderWidth = base * 0.01f,
-                smallRound = base * 0.01f,
-                mediumRound = base * 0.02f,
-                largeRound = base * 0.04f,
+                thinBorderWidth = base * 0.001f,
             )
             val padding = PaddingSize(
                 small = base * 0.01f,
@@ -115,6 +114,9 @@ class LayoutConstraints private constructor(
                 val defaultMessageLine = 4
 
                 BoxSize(
+                    smallBox = base * 0.04f,
+                    mediumBox = base * 0.08f,
+                    largeBox = base * 0.16f,
                     buttonHeight = buttonHeight,
                     defaultSelectionLine = defaultSelectionLine,
                     selectionBoxWidth = WidthRange(
