@@ -17,7 +17,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,28 +45,30 @@ fun BoxScope.EasterEgg1Screen(
     navController: NavController,
 ) {
     LocalLayoutConstraints.current.run {
-        val width = ceil(screen.width / box.smallBox).toInt()
-        val height = ceil(screen.height / box.smallBox).toInt()
+        val columns = ceil(screen.width / box.smallBox).toInt().let { it / 2 * 2 + 1 }
+        val rows = ceil(screen.height / box.smallBox).toInt().let { it / 2 * 2 + 1 }
 
-        val boxMap = remember(width, height) {
-            SnapshotStateList(width / 2 * 2 + 1) {
-                SnapshotStateList(height / 2 * 2 + 1) {
-                    false
+        val boxMap = remember(columns, rows) {
+            SnapshotStateList(columns) {
+                SnapshotStateList(rows) {
+                    0f
                 }
             }
         }
-        val boundsMap = remember(width, height) {
-            Array(width / 2 * 2 + 1) {
-                Array(height / 2 * 2 + 1) {
+        val boundsMap = remember(columns, rows) {
+            Array(columns) {
+                Array(rows) {
                     Rect.Zero
                 }
             }
         }
 
+        var isBrushed by rememberSaveable { mutableStateOf(true) }
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .pointerInput(width, height) {
+                .pointerInput(columns, rows) {
                     var lastOverIndex: Pair<Int, Int>? = null
                     detectDragGestures(
                         onDrag = { change, _ ->
@@ -72,7 +77,15 @@ fun BoxScope.EasterEgg1Screen(
                                 boundsColumn.forEachIndexed { yIndex, bounds ->
                                     if (bounds.contains(touchPoint)) {
                                         if (lastOverIndex != xIndex to yIndex) {
-                                            boxMap[xIndex][yIndex] = !boxMap[xIndex][yIndex]
+                                            if (isBrushed) {
+                                                if (xIndex - 1 in 0 ..< columns) boxMap[xIndex - 1][yIndex] = (boxMap[xIndex - 1][yIndex] + 0.25f).coerceAtMost(1f)
+                                                if (xIndex + 1 in 0 ..< columns) boxMap[xIndex + 1][yIndex] = (boxMap[xIndex + 1][yIndex] + 0.25f).coerceAtMost(1f)
+                                                if (yIndex - 1 in 0 ..< rows) boxMap[xIndex][yIndex - 1] = (boxMap[xIndex][yIndex - 1] + 0.25f).coerceAtMost(1f)
+                                                if (yIndex + 1 in 0 ..< rows) boxMap[xIndex][yIndex + 1] = (boxMap[xIndex][yIndex + 1] + 0.25f).coerceAtMost(1f)
+                                                boxMap[xIndex][yIndex] = (boxMap[xIndex][yIndex] + 0.5f).coerceAtMost(1f)
+                                            } else {
+                                                boxMap[xIndex][yIndex] = (boxMap[xIndex][yIndex] + 0.5f).coerceAtMost(1f)
+                                            }
                                             lastOverIndex = xIndex to yIndex
                                         }
                                     }
@@ -87,10 +100,10 @@ fun BoxScope.EasterEgg1Screen(
             val keyboardManager = LocalKeyboardEventManager.current
 
             // Blocks
-            for (x in -width / 2..width / 2) {
-                for (y in -height / 2..height / 2) {
-                    val xIndex = x + width / 2
-                    val yIndex = y + height / 2
+            for (x in -columns / 2..columns / 2) {
+                for (y in -rows / 2..rows / 2) {
+                    val xIndex = x + columns / 2
+                    val yIndex = y + rows / 2
                     Box(
                         modifier = Modifier
                             .align(Alignment.Center)
@@ -103,7 +116,7 @@ fun BoxScope.EasterEgg1Screen(
                                 boundsMap[xIndex][yIndex] = layoutCoordinates.boundsInParent()
                             }
                             .background(
-                                color = if (boxMap[xIndex][yIndex]) MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f).compositeOver(MaterialTheme.colorScheme.background) else MaterialTheme.colorScheme.background,
+                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = boxMap[xIndex][yIndex]).compositeOver(MaterialTheme.colorScheme.background),
                             )
                             .border(
                                 width = inset.thinBorderWidth,
@@ -112,8 +125,8 @@ fun BoxScope.EasterEgg1Screen(
                             )
                             .pointerInput(Unit) {
                                 detectTapGestures(
-                                    onPress = {
-                                        boxMap[xIndex][yIndex] = !boxMap[xIndex][yIndex]
+                                    onTap = {
+                                        boxMap[xIndex][yIndex] = (boxMap[xIndex][yIndex] + 0.25f).coerceAtMost(1f)
                                     },
                                 )
                             }
