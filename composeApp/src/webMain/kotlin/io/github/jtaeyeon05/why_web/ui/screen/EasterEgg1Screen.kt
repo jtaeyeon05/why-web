@@ -7,9 +7,11 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -164,6 +166,71 @@ fun BoxScope.EasterEgg1Screen(
                 ) {
                     Text(
                         text = "X",
+                        style = LocalTextStyle.current.copy(
+                            fontSize = typography.medium.sp,
+                            textAlign = TextAlign.Center,
+                            lineHeight = typography.medium.lineSp,
+                            lineHeightStyle = LineHeightStyle(
+                                alignment = LineHeightStyle.Alignment.Center,
+                                trim = LineHeightStyle.Trim.None
+                            ),
+                        ),
+                    )
+                }
+            }
+
+            // Toolbar
+            Column(
+                modifier = Modifier
+                    .width(box.buttonHeight)
+                    .align(Alignment.TopEnd),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(box.buttonHeight)
+                        .background(MaterialTheme.colorScheme.background)
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onTap = {
+                                    isBrushed = !isBrushed
+                                },
+                            )
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = if (isBrushed) "✑" else "✎",
+                        style = LocalTextStyle.current.copy(
+                            fontSize = typography.medium.sp,
+                            textAlign = TextAlign.Center,
+                            lineHeight = typography.medium.lineSp,
+                            lineHeightStyle = LineHeightStyle(
+                                alignment = LineHeightStyle.Alignment.Center,
+                                trim = LineHeightStyle.Trim.None
+                            ),
+                        ),
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .size(box.buttonHeight)
+                        .background(MaterialTheme.colorScheme.background)
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onTap = {
+                                    boxMap.forEachIndexed { xIndex, boxColumn ->
+                                        boxColumn.forEachIndexed { yIndex, _ ->
+                                            boxMap[xIndex][yIndex] = 0f
+                                        }
+                                    }
+                                },
+                            )
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "⟲",
                         style = LocalTextStyle.current.copy(
                             fontSize = typography.medium.sp,
                             textAlign = TextAlign.Center,
