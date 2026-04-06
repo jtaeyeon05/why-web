@@ -11,7 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import io.github.jtaeyeon05.why_web.navigation.appNavGraph
 import io.github.jtaeyeon05.why_web.navigation.bindBrowserHash
-import io.github.jtaeyeon05.why_web.navigation.parseInitHash
+import io.github.jtaeyeon05.why_web.navigation.parseHash
 import io.github.jtaeyeon05.why_web.ui.AppTheme
 import io.github.jtaeyeon05.why_web.ui.foundation.KeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
@@ -27,7 +27,7 @@ import io.github.jtaeyeon05.why_web.viewmodel.AppViewModel
 @Composable
 fun App() {
     val navController = rememberNavController()
-    val (initialModel, startScreen) = remember { parseInitHash() }
+    val (initialModel, startScreen) = remember { parseHash() }
     val viewModel = remember(initialModel) { AppViewModel(initialModel) }
 
     LaunchedEffect(navController) {

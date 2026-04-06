@@ -63,11 +63,12 @@ fun NavGraphBuilder.appNavGraph(
             )
         }
     }
-    composable<Screen.Born> {
+    composable<Screen.Born> { backStackEntry ->
         Box(modifier = Modifier.fillMaxSize()) {
             BornScreen(
                 navController = navController,
                 viewModel = viewModel,
+                screen = backStackEntry.toRoute<Screen.Born>(),
             )
         }
     }

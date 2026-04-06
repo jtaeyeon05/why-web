@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import io.github.jtaeyeon05.why_web.data.Avatar
 import io.github.jtaeyeon05.why_web.navigation.Screen
+import io.github.jtaeyeon05.why_web.navigation.refreshHash
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 import io.github.jtaeyeon05.why_web.ui.foundation.rememberAnimatedText
@@ -24,8 +25,22 @@ import io.github.jtaeyeon05.why_web.viewmodel.AppViewModel
 fun BoxScope.BornScreen(
     navController: NavController,
     viewModel: AppViewModel,
+    screen: Screen.Born,
 ) {
     LocalLayoutConstraints.current.run {
+        var screen by rememberSaveable { mutableStateOf(screen) }
+        LaunchedEffect(screen) {
+            if (screen.webMode && screen.drawMode) {
+                screen = screen.copy(webMode = false, drawMode = false)
+                refreshHash(
+                    model = viewModel.model.value,
+                    screen = screen
+                )
+                navController.currentBackStackEntry?.savedStateHandle?.set("webMode", screen.webMode)
+                navController.currentBackStackEntry?.savedStateHandle?.set("drawMode", screen.drawMode)
+            }
+        }
+
         // Message
         var texts by rememberSaveable { mutableStateOf(arrayOf("태어났다!", "어떤 행동을 할까?")) }
         var textsKey by rememberSaveable { mutableStateOf(0) }
@@ -66,19 +81,32 @@ fun BoxScope.BornScreen(
                 modifier = Modifier.fillMaxWidth(),
                 focused = selection == 0,
                 onClick = {
-                    // TODO
+                    screen = screen.copy(webMode = true)
+                    refreshHash(
+                        model = viewModel.model.value,
+                        screen = screen
+                    )
+                    navController.currentBackStackEntry?.savedStateHandle?.set("webMode", screen.webMode)
+                    // navController.navigate(Screen.Web)
                 },
                 onFocused = { selection = 0 },
             ) {
-                Text("TODO")
+                Text("웹 서핑 하기")
             }
             ClassicButton(
                 modifier = Modifier.fillMaxWidth(),
                 focused = selection == 1,
-                onClick = { navController.navigate(Screen.Web) },
+                onClick = {
+                    screen = screen.copy(drawMode = true)
+                    refreshHash(
+                        model = viewModel.model.value,
+                        screen = screen
+                    )
+                    navController.currentBackStackEntry?.savedStateHandle?.set("drawMode", screen.drawMode)
+                },
                 onFocused = { selection = 1 },
             ) {
-                Text("웹 서핑 하기")
+                Text("벽에 낙서하기${screen.webMode} ${screen.drawMode}")
             }
             ClassicButton(
                 modifier = Modifier.fillMaxWidth(),

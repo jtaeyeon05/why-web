@@ -9,9 +9,10 @@ import io.github.jtaeyeon05.why_web.util.BrowserWindow
 import io.github.jtaeyeon05.why_web.util.URLSearchParams
 import io.github.jtaeyeon05.why_web.util.buildQuery
 import io.github.jtaeyeon05.why_web.viewmodel.AppModel
+import kotlin.collections.plus
 
 
-fun parseInitHash(): Pair<AppModel, Screen> {
+fun parseHash(): Pair<AppModel, Screen> {
     val initHash = BrowserWindow.location.hash.removePrefix("#").substringBefore("?")
     val params = URLSearchParams(BrowserWindow.location.hash.substringAfter("?", ""))
 
@@ -24,42 +25,79 @@ fun parseInitHash(): Pair<AppModel, Screen> {
     return Pair(initialModel, screen)
 }
 
+fun serializeHash(
+    model: AppModel,
+    screen: Screen,
+): String {
+    val identifier: String = screen.identifier()
+    val modelMapQuery = model.toQueryMap()
+    val screenMapQuery = mutableMapOf<String, String>()
+    val screenListQuery = mutableListOf<String>()
+
+    when (screen) {
+        is Screen.Earth -> {
+            if (screen.destination != null)
+                screenMapQuery["destination"] = screen.destination
+        }
+        is Screen.Born -> {
+            if (screen.webMode)
+                screenListQuery.add("webMode")
+            if (screen.drawMode)
+                screenListQuery.add("drawMode")
+        }
+        is Screen.NotFound -> {
+            screenMapQuery["route"] = screen.route
+        }
+        else -> {}
+    }
+
+    return "#$identifier" + buildQuery(
+        mapQuery = modelMapQuery + screenMapQuery,
+        listQuery = screenListQuery
+    )
+}
+
+fun refreshHash(
+    model: AppModel,
+    screen: Screen,
+) {
+    val newHash = serializeHash(
+        model = model,
+        screen = screen,
+    )
+    BrowserWindow.history.replaceState(
+        data = null,
+        title = "",
+        url = newHash
+    )
+}
+
 @OptIn(ExperimentalBrowserHistoryApi::class)
 suspend fun NavController.bindBrowserHash(
-    modelProvider: () -> AppModel
+    modelProvider: () -> AppModel,
 ) {
     bindToBrowserNavigation(
         getBackStackEntryRoute = { entry ->
-            val identifier: String
-            val modelMapQuery = modelProvider().toQueryMap()
-            val screenMapQuery = mutableMapOf<String, String>()
-
             val destination = entry.destination
-            identifier = when {
-                destination.hasRoute<Screen.Start>() -> Screen.Start.identifier()
-                destination.hasRoute<Screen.Ready>() -> Screen.Ready.identifier()
-                destination.hasRoute<Screen.ToBeBorn1>() -> Screen.ToBeBorn1.identifier()
-                destination.hasRoute<Screen.ToBeBorn2>() -> Screen.ToBeBorn2.identifier()
-                destination.hasRoute<Screen.Earth>() -> {
-                    val screen = entry.toRoute<Screen.Earth>()
-                    screen.destination?.let { screenMapQuery["destination"] = screen.destination }
-                    screen.identifier()
-                }
-                destination.hasRoute<Screen.Born>() -> Screen.Born.identifier()
-                destination.hasRoute<Screen.Web>() -> Screen.Web.identifier()
-                destination.hasRoute<Screen.NotToBeBorn>() -> Screen.NotToBeBorn.identifier()
-                destination.hasRoute<Screen.EasterEgg1>() -> Screen.EasterEgg1.identifier()
-                destination.hasRoute<Screen.EasterEgg2>() -> Screen.EasterEgg2.identifier()
-                destination.hasRoute<Screen.NotFound>() -> {
-                    val screen = entry.toRoute<Screen.NotFound>()
-                    screenMapQuery["route"] = screen.route
-                    screen.identifier()
-                }
-                else -> ""
+
+            val screen: Screen = when {
+                destination.hasRoute<Screen.Start>() -> Screen.Start
+                destination.hasRoute<Screen.Ready>() -> Screen.Ready
+                destination.hasRoute<Screen.ToBeBorn1>() -> Screen.ToBeBorn1
+                destination.hasRoute<Screen.ToBeBorn2>() -> Screen.ToBeBorn2
+                destination.hasRoute<Screen.Earth>() -> entry.toRoute<Screen.Earth>()
+                destination.hasRoute<Screen.Born>() -> entry.toRoute<Screen.Born>()
+                destination.hasRoute<Screen.Web>() -> Screen.Web
+                destination.hasRoute<Screen.NotToBeBorn>() -> Screen.NotToBeBorn
+                destination.hasRoute<Screen.EasterEgg1>() -> Screen.EasterEgg1
+                destination.hasRoute<Screen.EasterEgg2>() -> Screen.EasterEgg2
+                destination.hasRoute<Screen.NotFound>() -> entry.toRoute<Screen.NotFound>()
+                else -> Screen.NotFound(route = destination.route ?: "???")
             }
 
-            "#$identifier" + buildQuery(
-                queryMap = modelMapQuery + screenMapQuery
+            serializeHash(
+                model = modelProvider(),
+                screen = screen,
             )
         }
     )

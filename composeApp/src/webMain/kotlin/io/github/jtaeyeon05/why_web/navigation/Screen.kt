@@ -24,7 +24,10 @@ sealed interface Screen {
     ): Screen
 
     @Serializable
-    data object Born: Screen
+    data class Born(
+        val webMode: Boolean = false,
+        val drawMode: Boolean = false,
+    ): Screen
 
     @Serializable
     data object Web: Screen
@@ -74,7 +77,14 @@ sealed interface Screen {
                     destination = destination,
                 )
             }
-            "born" -> Born
+            "born" -> {
+                val webMode = params?.has("webMode") ?: false
+                val drawMode = params?.has("drawMode") ?: false
+                Born(
+                    webMode = webMode,
+                    drawMode = drawMode,
+                )
+            }
             "web" -> Web
             "notToBeBorn" -> NotToBeBorn
             "eeeastrgg1", "gGiMZziPPokgeunBHap", "wa_gorapaduck", "._..-.._-__-_._.-.._-.__-._-._..-._..-_._-_..-__-.__-.-.__", "bozovaetteoli", "byeongmucheong"

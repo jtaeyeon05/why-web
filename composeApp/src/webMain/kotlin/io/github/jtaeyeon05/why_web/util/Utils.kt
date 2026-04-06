@@ -33,16 +33,16 @@ val emojiGroups = listOf(
 )
 
 fun buildQuery(
-    queryMap: Map<String, String?> = mapOf(),
-    queryList: List<String?> = listOf(),
+    mapQuery: Map<String, String?> = mapOf(),
+    listQuery: List<String?> = listOf(),
 ): String {
     val parts = mutableListOf<String>()
-    for ((key, value) in queryMap) {
+    for ((key, value) in mapQuery) {
         if (value != null) {
             parts.add("$key=${encodeURIComponent(value)}")
         }
     }
-    for (query in queryList) {
+    for (query in listQuery) {
         if (query != null) {
             parts.add(query)
         }
