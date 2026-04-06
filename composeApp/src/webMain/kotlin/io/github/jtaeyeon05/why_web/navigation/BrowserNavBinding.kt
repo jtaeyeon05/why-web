@@ -39,12 +39,6 @@ fun serializeHash(
             if (screen.destination != null)
                 screenMapQuery["destination"] = screen.destination
         }
-        is Screen.Born -> {
-            if (screen.webMode)
-                screenListQuery.add("webMode")
-            if (screen.drawMode)
-                screenListQuery.add("drawMode")
-        }
         is Screen.NotFound -> {
             screenMapQuery["route"] = screen.route
         }
@@ -86,7 +80,7 @@ suspend fun NavController.bindBrowserHash(
                 destination.hasRoute<Screen.ToBeBorn1>() -> Screen.ToBeBorn1
                 destination.hasRoute<Screen.ToBeBorn2>() -> Screen.ToBeBorn2
                 destination.hasRoute<Screen.Earth>() -> entry.toRoute<Screen.Earth>()
-                destination.hasRoute<Screen.Born>() -> entry.toRoute<Screen.Born>()
+                destination.hasRoute<Screen.Born>() -> Screen.Born
                 destination.hasRoute<Screen.Web>() -> Screen.Web
                 destination.hasRoute<Screen.NotToBeBorn>() -> Screen.NotToBeBorn
                 destination.hasRoute<Screen.EasterEgg1>() -> Screen.EasterEgg1

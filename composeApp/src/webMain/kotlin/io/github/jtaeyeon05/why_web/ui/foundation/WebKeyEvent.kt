@@ -48,5 +48,11 @@ enum class WebKey(val value: String) {
 enum class WebKeyType(val value: String) {
     KEY_DOWN("keydown"),
     KEY_UP("keyup"),
-    UNSPECIFIED("unspecified")
+    UNSPECIFIED("unspecified");
+
+    companion object {
+        fun fromValue(value: String?): WebKeyType {
+            return entries.find { it.value == value } ?: UNSPECIFIED
+        }
+    }
 }

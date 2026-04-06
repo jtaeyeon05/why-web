@@ -1,10 +1,11 @@
+@file:OptIn(ExperimentalWasmJsInterop::class)
+
 package io.github.jtaeyeon05.why_web.util
 
 import kotlin.js.ExperimentalWasmJsInterop
 import kotlin.js.js
 
 
-@OptIn(ExperimentalWasmJsInterop::class)
 fun showCompose() {
     js(
         """
@@ -14,7 +15,6 @@ fun showCompose() {
     )
 }
 
-@OptIn(ExperimentalWasmJsInterop::class)
 fun stopLoader() {
     js("if (window.stopLoader) window.stopLoader();")
 }

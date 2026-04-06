@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.times
+import androidx.navigation.NavController
 import com.parkwoocheol.composewebview.ComposeWebView
 import com.parkwoocheol.composewebview.DarkMode
 import com.parkwoocheol.composewebview.WebViewSettings
@@ -37,6 +39,7 @@ import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 import io.github.jtaeyeon05.why_web.ui.foundation.rememberAnimatedText
 import io.github.jtaeyeon05.why_web.ui.widget.MessageBox
+import io.github.jtaeyeon05.why_web.ui.widget.MiniSquareButton
 import io.github.jtaeyeon05.why_web.util.BrowserWindow
 import io.github.jtaeyeon05.why_web.util.focusIframes
 import io.github.jtaeyeon05.why_web.viewmodel.AppViewModel
@@ -47,6 +50,7 @@ import kotlin.random.Random
 
 @Composable
 fun BoxScope.WebScreen(
+    navController: NavController,
     viewModel: AppViewModel,
 ) {
     LocalLayoutConstraints.current.run {
@@ -58,7 +62,7 @@ fun BoxScope.WebScreen(
         LaunchedEffect(Unit) {
             keyboardManager.events.collect { webKeyEvent ->
                 if (webKeyEvent.isConfirmPressed) {
-                    keyboardManager.kill()
+                    keyboardManager.disable()
                     isWebShowing = true
                 }
             }
@@ -67,13 +71,13 @@ fun BoxScope.WebScreen(
             val job = scope.launch {
                 delay(2_500)
                 if (!isWebShowing) {
-                    keyboardManager.kill()
+                    keyboardManager.disable()
                     isWebShowing = true
                 }
             }
             onDispose {
                 job.cancel()
-                keyboardManager.revive()
+                keyboardManager.enable()
             }
         }
 
@@ -145,6 +149,28 @@ fun BoxScope.WebScreen(
                     },
                 )
             }
+        }
+
+        // Close
+        val canBack by derivedStateOf { navController.previousBackStackEntry != null }
+
+        LaunchedEffect(canBack) {
+            if (canBack) {
+                keyboardManager.globalEvents.collect { webKeyEvent ->
+                    if (webKeyEvent.isCancelPressed) {
+                        keyboardManager.enable()
+                        navController.popBackStack()
+                    }
+                }
+            }
+        }
+
+        if (canBack) {
+            MiniSquareButton(
+                modifier = Modifier.align(Alignment.TopStart),
+                text = "X",
+                onClick = { navController.popBackStack() },
+            )
         }
     }
 }

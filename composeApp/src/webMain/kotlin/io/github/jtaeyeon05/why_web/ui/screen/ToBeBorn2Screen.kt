@@ -78,7 +78,7 @@ fun BoxScope.ToBeBorn2Screen(
                                     viewModel.updateName(col * 2 + row)
                                     navController.navigate(
                                         route = Screen.Earth(
-                                            destination = Screen.Born().identifier(),
+                                            destination = Screen.Born.identifier(),
                                         )
                                     )
                                 },

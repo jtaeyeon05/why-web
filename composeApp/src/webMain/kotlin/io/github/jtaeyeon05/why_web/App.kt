@@ -20,10 +20,16 @@ import io.github.jtaeyeon05.why_web.ui.foundation.WebKeyEvent
 import io.github.jtaeyeon05.why_web.ui.foundation.WebKeyType
 import io.github.jtaeyeon05.why_web.ui.foundation.rememberLayoutConstraints
 import io.github.jtaeyeon05.why_web.util.BrowserWindow
+import io.github.jtaeyeon05.why_web.util.IframeKeyMessage
+import io.github.jtaeyeon05.why_web.util.WebJSON
 import io.github.jtaeyeon05.why_web.util.WebKeyboardEvent
+import io.github.jtaeyeon05.why_web.util.WebMessageEvent
 import io.github.jtaeyeon05.why_web.viewmodel.AppViewModel
+import kotlin.js.ExperimentalWasmJsInterop
+import kotlin.js.unsafeCast
 
 
+@OptIn(ExperimentalWasmJsInterop::class)
 @Composable
 fun App() {
     val navController = rememberNavController()
@@ -56,11 +62,41 @@ fun App() {
                                 status = WebKeyType.KEY_DOWN,
                             )
                         )
+                        BrowserWindow.parent.postMessage(
+                            message = WebJSON.parse(
+                                """
+                                    {
+                                        "type": "IFRAME_KEY",
+                                        "keyCode": "${event.keyCode}",
+                                        "status": "${WebKeyType.KEY_DOWN.value}"
+                                    }
+                                """.trimIndent()
+                            ),
+                            targetOrigin = "*",
+                        )
                     }
 
                     BrowserWindow.addEventListener(type = WebKeyType.KEY_DOWN.value, listener = listener)
                     onDispose {
                         BrowserWindow.removeEventListener(type = WebKeyType.KEY_DOWN.value, listener = listener)
+                    }
+                }
+                DisposableEffect(keyboardManager) {
+                    val listener = { event: WebMessageEvent ->
+                        val message = event.data?.unsafeCast<IframeKeyMessage>()
+                        if (message?.type == "IFRAME_KEY" && message.keyCode != null && message.status != null) {
+                            keyboardManager.iframeDispatch(
+                                WebKeyEvent(
+                                    keyCode = message.keyCode!!,
+                                    status = WebKeyType.fromValue(message.status!!),
+                                )
+                            )
+                        }
+                    }
+
+                    BrowserWindow.addEventListener(type = "message", listener = listener)
+                    onDispose {
+                        BrowserWindow.removeEventListener(type = "message", listener = listener)
                     }
                 }
 
