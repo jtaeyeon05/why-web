@@ -12,12 +12,12 @@ import io.github.jtaeyeon05.why_web.viewmodel.AppModel
 
 
 fun parseInitHash(): Pair<AppModel, Screen> {
-    val initHash = BrowserWindow.location.hash.removePrefix("#")
-    val params = URLSearchParams(initHash.substringAfter("?", ""))
+    val initHash = BrowserWindow.location.hash.removePrefix("#").substringBefore("?")
+    val params = URLSearchParams(BrowserWindow.location.hash.substringAfter("?", ""))
 
     val initialModel = AppModel.fromQuery(params)
     val screen = Screen.fromIdentifier(
-        identifier = initHash.substringBefore("?"),
+        identifier = initHash,
         params = params
     )
 
@@ -31,8 +31,8 @@ suspend fun NavController.bindBrowserHash(
     bindToBrowserNavigation(
         getBackStackEntryRoute = { entry ->
             val identifier: String
-            val modelQueryMap = modelProvider().toQueryMap()
-            val screenQueryMap = mutableMapOf<String, String>()
+            val modelMapQuery = modelProvider().toQueryMap()
+            val screenMapQuery = mutableMapOf<String, String>()
 
             val destination = entry.destination
             identifier = when {
@@ -42,7 +42,7 @@ suspend fun NavController.bindBrowserHash(
                 destination.hasRoute<Screen.ToBeBorn2>() -> Screen.ToBeBorn2.identifier()
                 destination.hasRoute<Screen.Earth>() -> {
                     val screen = entry.toRoute<Screen.Earth>()
-                    screen.destination?.let { screenQueryMap["destination"] = screen.destination }
+                    screen.destination?.let { screenMapQuery["destination"] = screen.destination }
                     screen.identifier()
                 }
                 destination.hasRoute<Screen.Born>() -> Screen.Born.identifier()
@@ -52,13 +52,15 @@ suspend fun NavController.bindBrowserHash(
                 destination.hasRoute<Screen.EasterEgg2>() -> Screen.EasterEgg2.identifier()
                 destination.hasRoute<Screen.NotFound>() -> {
                     val screen = entry.toRoute<Screen.NotFound>()
-                    screenQueryMap["route"] = screen.route
+                    screenMapQuery["route"] = screen.route
                     screen.identifier()
                 }
                 else -> ""
             }
 
-            "#" + identifier + buildQuery(modelQueryMap + screenQueryMap)
+            "#$identifier" + buildQuery(
+                queryMap = modelMapQuery + screenMapQuery
+            )
         }
     )
 }

@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 plugins {
@@ -9,7 +10,7 @@ plugins {
     kotlin("plugin.serialization") version "2.3.0"
 }
 
-val version = "0.0.36B"
+val version = "0.0.37B"
 val buildInfoPackage = "io.github.jtaeyeon05.why_web.buildinfo"
 val buildInfoDir = layout.buildDirectory.dir("generated/sources/buildInfo/kotlin")
 
@@ -26,7 +27,7 @@ abstract class GenerateBuildInfoTask : DefaultTask() {
 
     @TaskAction
     fun generate() {
-        val buildNumber = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
+        val buildNumber = LocalDateTime.now(ZoneId.of("Asia/Seoul")).format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
         val out = outDir.get().asFile
         val pkgPath = pkgProp.get().replace('.', '/')
         val file = File(out, "$pkgPath/BuildInfo.kt")
