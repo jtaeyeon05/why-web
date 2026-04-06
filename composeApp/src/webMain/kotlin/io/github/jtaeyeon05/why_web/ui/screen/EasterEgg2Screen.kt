@@ -45,6 +45,7 @@ import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 import io.github.jtaeyeon05.why_web.ui.foundation.WebKey
 import io.github.jtaeyeon05.why_web.ui.widget.BouncingEmoji
 import io.github.jtaeyeon05.why_web.ui.widget.ClassicButton
+import io.github.jtaeyeon05.why_web.ui.widget.MiniSquareButton
 import io.github.jtaeyeon05.why_web.ui.widget.SelectionBox
 import io.github.jtaeyeon05.why_web.util.emojiGroups
 import io.github.jtaeyeon05.why_web.util.enableIframesToAutoplay
@@ -190,33 +191,11 @@ fun BoxScope.EasterEgg2Screen(
             }
 
             if (canBack) {
-                Box(
-                    modifier = Modifier
-                        .size(box.buttonHeight)
-                        .align(Alignment.TopStart)
-                        .background(MaterialTheme.colorScheme.background)
-                        .pointerInput(Unit) {
-                            detectTapGestures(
-                                onTap = {
-                                    navController.popBackStack()
-                                },
-                            )
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "X",
-                        style = LocalTextStyle.current.copy(
-                            fontSize = typography.medium.sp,
-                            textAlign = TextAlign.Center,
-                            lineHeight = typography.medium.lineSp,
-                            lineHeightStyle = LineHeightStyle(
-                                alignment = LineHeightStyle.Alignment.Center,
-                                trim = LineHeightStyle.Trim.None
-                            ),
-                        ),
-                    )
-                }
+                MiniSquareButton(
+                    modifier = Modifier.align(Alignment.TopStart),
+                    text = "X",
+                    onClick = { navController.popBackStack() },
+                )
             }
 
             // Selection

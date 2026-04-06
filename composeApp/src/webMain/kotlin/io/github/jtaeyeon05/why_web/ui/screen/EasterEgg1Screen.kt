@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.LocalTextStyle
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.times
 import androidx.navigation.NavController
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
+import io.github.jtaeyeon05.why_web.ui.widget.MiniSquareButton
 import kotlin.math.ceil
 
 
@@ -47,8 +49,8 @@ fun BoxScope.EasterEgg1Screen(
     navController: NavController,
 ) {
     LocalLayoutConstraints.current.run {
-        val columns = ceil(screen.width / box.smallBox).toInt().let { it / 2 * 2 + 1 }
-        val rows = ceil(screen.height / box.smallBox).toInt().let { it / 2 * 2 + 1 }
+        val columns = ceil(screen.width / box.smallBox).toInt().let { it / 2 * 2 + 2 }
+        val rows = ceil(screen.height / box.smallBox).toInt().let { it / 2 * 2 + 2 }
 
         val boxMap = remember(columns, rows) {
             SnapshotStateList(columns) {
@@ -102,16 +104,16 @@ fun BoxScope.EasterEgg1Screen(
             val keyboardManager = LocalKeyboardEventManager.current
 
             // Blocks
-            for (x in -columns / 2..columns / 2) {
-                for (y in -rows / 2..rows / 2) {
+            for (x in -columns / 2 ..< columns / 2) {
+                for (y in -rows / 2 ..< rows / 2) {
                     val xIndex = x + columns / 2
                     val yIndex = y + rows / 2
                     Box(
                         modifier = Modifier
                             .align(Alignment.Center)
                             .offset(
-                                x = x * box.smallBox,
-                                y = y * box.smallBox,
+                                x = (x + 0.5f) * box.smallBox,
+                                y = (y + 0.5f) * box.smallBox,
                             )
                             .size(box.smallBox)
                             .onGloballyPositioned { layoutCoordinates ->
@@ -136,6 +138,35 @@ fun BoxScope.EasterEgg1Screen(
                 }
             }
 
+            // Guide
+            Box(
+                modifier = Modifier
+                    .size(box.smallBox * 20 + inset.borderWidth)
+                    .align(Alignment.Center)
+                    .border(
+                        width = inset.borderWidth,
+                        color = MaterialTheme.colorScheme.secondary,
+                    )
+            )
+
+            // TestText
+            Text(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(padding.small),
+                text = "columns: $columns, rows: $rows",
+                style = LocalTextStyle.current.copy(
+                    fontSize = typography.small.sp,
+                    textAlign = TextAlign.End,
+                    lineHeight = typography.small.lineSp,
+                    lineHeightStyle = LineHeightStyle(
+                        alignment = LineHeightStyle.Alignment.Center,
+                        trim = LineHeightStyle.Trim.None
+                    ),
+                ),
+            )
+
             // Close
             val canBack by derivedStateOf { navController.previousBackStackEntry != null }
 
@@ -150,33 +181,11 @@ fun BoxScope.EasterEgg1Screen(
             }
 
             if (canBack) {
-                Box(
-                    modifier = Modifier
-                        .size(box.buttonHeight)
-                        .align(Alignment.TopStart)
-                        .background(MaterialTheme.colorScheme.background)
-                        .pointerInput(Unit) {
-                            detectTapGestures(
-                                onTap = {
-                                    navController.popBackStack()
-                                },
-                            )
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "X",
-                        style = LocalTextStyle.current.copy(
-                            fontSize = typography.medium.sp,
-                            textAlign = TextAlign.Center,
-                            lineHeight = typography.medium.lineSp,
-                            lineHeightStyle = LineHeightStyle(
-                                alignment = LineHeightStyle.Alignment.Center,
-                                trim = LineHeightStyle.Trim.None
-                            ),
-                        ),
-                    )
-                }
+                MiniSquareButton(
+                    modifier = Modifier.align(Alignment.TopStart),
+                    text = "X",
+                    onClick = { navController.popBackStack() },
+                )
             }
 
             // Toolbar
@@ -186,62 +195,20 @@ fun BoxScope.EasterEgg1Screen(
                     .align(Alignment.TopEnd),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(box.buttonHeight)
-                        .background(MaterialTheme.colorScheme.background)
-                        .pointerInput(Unit) {
-                            detectTapGestures(
-                                onTap = {
-                                    isBrushed = !isBrushed
-                                },
-                            )
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = if (isBrushed) "✑" else "✎",
-                        style = LocalTextStyle.current.copy(
-                            fontSize = typography.medium.sp,
-                            textAlign = TextAlign.Center,
-                            lineHeight = typography.medium.lineSp,
-                            lineHeightStyle = LineHeightStyle(
-                                alignment = LineHeightStyle.Alignment.Center,
-                                trim = LineHeightStyle.Trim.None
-                            ),
-                        ),
-                    )
-                }
-                Box(
-                    modifier = Modifier
-                        .size(box.buttonHeight)
-                        .background(MaterialTheme.colorScheme.background)
-                        .pointerInput(Unit) {
-                            detectTapGestures(
-                                onTap = {
-                                    boxMap.forEachIndexed { xIndex, boxColumn ->
-                                        boxColumn.forEachIndexed { yIndex, _ ->
-                                            boxMap[xIndex][yIndex] = 0f
-                                        }
-                                    }
-                                },
-                            )
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "⟲",
-                        style = LocalTextStyle.current.copy(
-                            fontSize = typography.medium.sp,
-                            textAlign = TextAlign.Center,
-                            lineHeight = typography.medium.lineSp,
-                            lineHeightStyle = LineHeightStyle(
-                                alignment = LineHeightStyle.Alignment.Center,
-                                trim = LineHeightStyle.Trim.None
-                            ),
-                        ),
-                    )
-                }
+                MiniSquareButton(
+                    text = if (isBrushed) "✑" else "✎",
+                    onClick = { isBrushed = !isBrushed },
+                )
+                MiniSquareButton(
+                    text = "⟲",
+                    onClick = {
+                        boxMap.forEachIndexed { xIndex, boxColumn ->
+                            boxColumn.forEachIndexed { yIndex, _ ->
+                                boxMap[xIndex][yIndex] = 0f
+                            }
+                        }
+                    },
+                )
             }
         }
     }

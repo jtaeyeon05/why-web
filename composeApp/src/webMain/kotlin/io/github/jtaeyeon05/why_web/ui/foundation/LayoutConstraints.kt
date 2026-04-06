@@ -116,7 +116,7 @@ class LayoutConstraints private constructor(
                 BoxSize(
                     smallBox = base * 0.04f,
                     mediumBox = base * 0.08f,
-                    largeBox = base * 0.16f,
+                    largeBox = base * 0.24f,
                     buttonHeight = buttonHeight,
                     defaultSelectionLine = defaultSelectionLine,
                     selectionBoxWidth = WidthRange(
