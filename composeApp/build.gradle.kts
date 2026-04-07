@@ -10,7 +10,7 @@ plugins {
     kotlin("plugin.serialization") version "2.3.0"
 }
 
-val version = "0.0.40B"
+val version = "0.0.41B"
 val buildInfoPackage = "io.github.jtaeyeon05.why_web.buildinfo"
 val buildInfoDir = layout.buildDirectory.dir("generated/sources/buildInfo/kotlin")
 

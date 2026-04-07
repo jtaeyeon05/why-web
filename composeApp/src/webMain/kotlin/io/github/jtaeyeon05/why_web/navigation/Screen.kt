@@ -1,5 +1,7 @@
 package io.github.jtaeyeon05.why_web.navigation
 
+import io.github.jtaeyeon05.why_web.ui.screen.Drawing
+import io.github.jtaeyeon05.why_web.ui.screen.Painter
 import io.github.jtaeyeon05.why_web.util.URLSearchParams
 import io.github.jtaeyeon05.why_web.util.get
 import kotlinx.serialization.Serializable
@@ -31,7 +33,8 @@ sealed interface Screen {
 
     @Serializable
     data class Draw(
-        val test: String = ""
+        val painterValue: String = Painter().toValue(),
+        val drawingValue: String = Drawing().toValue(),
     ): Screen
 
     @Serializable
@@ -83,8 +86,12 @@ sealed interface Screen {
             "born" -> Born
             "web" -> Web
             "draw" -> {
-                // TODO
-                Draw()
+                val painterValue = params?.get("painterValue")
+                val drawingValue = params?.get("drawingValue")
+                Draw(
+                    painterValue = painterValue ?: Painter().toValue(),
+                    drawingValue = drawingValue ?: Drawing().toValue(),
+                )
             }
             "notToBeBorn" -> NotToBeBorn
             "eeeastrgg1", "gGiMZziPPokgeunBHap", "wa_gorapaduck", "._..-.._-__-_._.-.._-.__-._-._..-._..-_._-_..-__-.__-.-.__", "bozovaetteoli", "byeongmucheong"

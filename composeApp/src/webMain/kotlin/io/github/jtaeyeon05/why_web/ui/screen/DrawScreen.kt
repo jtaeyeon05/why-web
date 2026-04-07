@@ -1,6 +1,8 @@
 package io.github.jtaeyeon05.why_web.ui.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -32,6 +34,7 @@ import androidx.compose.ui.unit.times
 import androidx.navigation.NavController
 import io.github.jtaeyeon05.why_web.data.Avatar
 import io.github.jtaeyeon05.why_web.navigation.Screen
+import io.github.jtaeyeon05.why_web.navigation.refreshHash
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 import io.github.jtaeyeon05.why_web.ui.foundation.WebKey
@@ -42,96 +45,6 @@ import io.github.jtaeyeon05.why_web.ui.widget.MiniSquareButton
 import io.github.jtaeyeon05.why_web.ui.widget.SelectionBox
 import io.github.jtaeyeon05.why_web.viewmodel.AppViewModel
 
-
-data class Pixel(
-    val x: Int,
-    val y: Int,
-    val type: PixelType
-) {
-    enum class PixelType {
-        DOT, STAR, EYE, FACE, FIRE
-    }
-}
-
-class Drawing(
-    val drawingSize: Int = 25,
-    initialPixelList: List<Pixel> = listOf(),
-) {
-    private val _pixelList = mutableStateListOf<Pixel>().apply { addAll(initialPixelList) }
-    val pixelList: List<Pixel> get() = _pixelList
-
-    fun draw(
-        x: Int,
-        y: Int,
-        type: Pixel.PixelType = Pixel.PixelType.DOT
-    ) {
-        _pixelList.add(
-            Pixel(
-                x = x.coerceIn(0 ..< drawingSize),
-                y = y.coerceIn(0 ..< drawingSize),
-                type = type,
-            )
-        )
-    }
-
-    fun erase(x: Int, y: Int) {
-        _pixelList.removeAll {
-            it.x == x && it.y == y
-        }
-    }
-
-    fun clear() {
-        _pixelList.clear()
-    }
-
-    fun toValue(): String {
-        return "D$drawingSize" + pixelList.joinToString { pixel ->
-            ",X${pixel.x}-Y${pixel.y}-T${pixel.type.name}"
-        }
-    }
-
-    companion object {
-        fun fromValue(value: String): Drawing {
-            var drawingSize = 25
-            val pixelList = mutableListOf<Pixel>()
-
-            try {
-                value.split(",")[0].let { settingStr ->
-                    val params = settingStr.split("-").associate {
-                        val key = it.take(1)
-                        val valStr = it.drop(1)
-                        key to valStr
-                    }
-
-                    if (params["D"]?.toIntOrNull() != null)
-                        drawingSize = params["D"]?.toIntOrNull()!!
-                }
-            } catch (_: Exception) {  }
-            value.split(",").drop(1).forEach { pixelStr ->
-                try {
-                    val params = pixelStr.split("-").associate {
-                        val key = it.take(1)
-                        val valStr = it.drop(1)
-                        key to valStr
-                    }
-
-                    pixelList.add(
-                        Pixel(
-                            x = params["X"]!!.toInt(),
-                            y = params["Y"]!!.toInt(),
-                            type = Pixel.PixelType.valueOf(params["T"]!!)
-                        )
-                    )
-                } catch (_: Exception) {  }
-            }
-
-            return Drawing(
-                drawingSize = drawingSize,
-                initialPixelList = pixelList
-            )
-        }
-    }
-}
 
 class Painter(
     val drawingSize: Int = 25,
@@ -181,7 +94,7 @@ class Painter(
     }
 
     fun toValue(): String {
-        return "D$drawingSize-X${x}-Y${y}-P${isPencilMode}-E${isEraserMode}"
+        return "D${drawingSize.toString(36)}-X${x.toString(36)}-Y${y.toString(36)}-P${isPencilMode}-E${isEraserMode}"
     }
 
     companion object {
@@ -194,15 +107,113 @@ class Painter(
                 }
 
                 Painter(
-                    drawingSize = params["D"]?.toIntOrNull() ?: 25,
-                    initialX = params["X"]?.toIntOrNull(),
-                    initialY = params["Y"]?.toIntOrNull(),
+                    drawingSize = params["D"]?.toIntOrNull(36) ?: Painter().drawingSize,
+                    initialX = params["X"]?.toIntOrNull(36),
+                    initialY = params["Y"]?.toIntOrNull(36),
                     initialIsPencilMode = params["P"]?.toBooleanStrictOrNull(),
                     initialIsEraserMode = params["E"]?.toBooleanStrictOrNull()
                 )
             } catch (_: Exception) {
                 Painter()
             }
+        }
+    }
+}
+
+data class Pixel(
+    val x: Int,
+    val y: Int,
+    val type: PixelType
+) {
+    enum class PixelType(val value: String) {
+        DOT("d"), STAR("s"), EYE("e"), MAN("m"), FIRE("f");
+
+        companion object {
+            fun fromValue(value: String?): PixelType {
+                return entries.find { it.value == value } ?: DOT
+            }
+        }
+    }
+}
+
+class Drawing(
+    val drawingSize: Int = 25,
+    val maxPixelNumber: Int = 200,
+    initialPixelList: List<Pixel> = listOf(),
+) {
+    private val _pixelList = mutableStateListOf<Pixel>().apply { addAll(initialPixelList) }
+    val pixelList: List<Pixel> get() = _pixelList
+
+    fun draw(
+        x: Int,
+        y: Int,
+        type: Pixel.PixelType = Pixel.PixelType.DOT
+    ) {
+        _pixelList.add(
+            Pixel(
+                x = x.coerceIn(0 ..< drawingSize),
+                y = y.coerceIn(0 ..< drawingSize),
+                type = type,
+            )
+        )
+        while (_pixelList.size >= maxPixelNumber) {
+            _pixelList.removeFirst()
+        }
+    }
+
+    fun erase(x: Int, y: Int) {
+        _pixelList.removeAll {
+            it.x == x && it.y == y
+        }
+    }
+
+    /*fun clear() {
+        _pixelList.clear()
+    }*/
+
+    fun toValue(): String {
+        return "D${drawingSize.toString(36)}M${maxPixelNumber.toString(36)}." + pixelList.joinToString("") { pixel ->
+            "${pixel.x.toString(36)}${pixel.y.toString(36)}${pixel.type.value}"
+        }
+    }
+
+    companion object {
+        fun fromValue(value: String): Drawing {
+            var drawingSize = Drawing().drawingSize
+            var maxPixelNumber = Drawing().maxPixelNumber
+            val pixelList = mutableListOf<Pixel>()
+
+            try {
+                value.split(".")[0].let { settingStr ->
+                    val params = settingStr.split("-").associate {
+                        val key = it.take(1)
+                        val valStr = it.drop(1)
+                        key to valStr
+                    }
+
+                    if (params["D"]?.toIntOrNull() != null)
+                        drawingSize = params["D"]?.toIntOrNull(36)!!
+                    if (params["M"]?.toIntOrNull() != null)
+                        maxPixelNumber = params["M"]?.toIntOrNull(36)!!
+                }
+            } catch (_: Exception) {  }
+            value.split(".")[1].windowed(size = 3, step = 3).forEach { pixelStr ->
+                try {
+                    pixelList.add(
+                        Pixel(
+                            x = pixelStr[0].toString().toInt(36),
+                            y = pixelStr[1].toString().toInt(36),
+                            type = Pixel.PixelType.fromValue(pixelStr[2].toString()),
+                        )
+                    )
+                } catch (_: Exception) {  }
+            }
+
+            return Drawing(
+                drawingSize = drawingSize,
+                maxPixelNumber = maxPixelNumber,
+                initialPixelList = pixelList
+            )
         }
     }
 }
@@ -216,25 +227,29 @@ fun BoxScope.DrawScreen(
     LocalLayoutConstraints.current.run {
         val keyboardManager = LocalKeyboardEventManager.current
 
-        val screen by rememberSaveable { mutableStateOf(screen) }
-        val drawing by rememberSaveable { mutableStateOf(Drawing()) }
-        val painter by rememberSaveable { mutableStateOf(Painter()) }
+        var screen by rememberSaveable { mutableStateOf(screen) }
+        var painter by rememberSaveable { mutableStateOf(Painter.fromValue(screen.painterValue)) }
+        var drawing by rememberSaveable { mutableStateOf(Drawing.fromValue(screen.drawingValue)) }
 
-        // TODO: Hash
-        /*fun refresh(newScreen: Screen.Draw) {
-            screen = newScreen
+        fun updateHash() {
+            screen = screen.copy(
+                painterValue = painter.toValue(),
+                drawingValue = drawing.toValue(),
+            )
             refreshHash(
                 model = viewModel.model.value,
                 screen = screen
             )
-            navController.currentBackStackEntry?.savedStateHandle?.set("test", screen.test)
-        }*/
+            navController.currentBackStackEntry?.savedStateHandle?.set("painterValue", screen.painterValue)
+            navController.currentBackStackEntry?.savedStateHandle?.set("drawingValue", screen.drawingValue)
+        }
 
         // Drawing Box
         LaunchedEffect(
             painter.x, painter.y,
             painter.isPencilMode, painter.isEraserMode
         ) {
+            updateHash()
             if (painter.isPencilMode) {
                 drawing.draw(
                     x = painter.x,
@@ -249,14 +264,56 @@ fun BoxScope.DrawScreen(
                 )
             }
         }
+        LaunchedEffect(drawing.pixelList) {
+            updateHash()
+        }
 
         BoxWithConstraints(
             modifier = Modifier
                 .padding(bottom = box.messageBoxHeight(2))
-                .fillMaxSize(),
+                .fillMaxSize()
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onTap = { touchPoint ->
+                            val blockWidth = size.width / 25
+                            val blockHeight = size.height / 25
+
+                            val targetX = (touchPoint.x / blockWidth).toInt()
+                            val targetY = (touchPoint.y / blockHeight).toInt()
+
+                            painter.moveTo(
+                                x = targetX,
+                                y = targetY,
+                            )
+                        },
+                    )
+                }
+                .pointerInput(Unit) {
+                    var lastPoint: Pair<Int, Int>? = null
+                    detectDragGestures(
+                        onDrag = { change, _ ->
+                            val blockWidth = size.width / 25
+                            val blockHeight = size.height / 25
+
+                            val touchPoint = change.position
+                            val targetX = (touchPoint.x / blockWidth).toInt()
+                            val targetY = (touchPoint.y / blockHeight).toInt()
+
+                            if (lastPoint != targetX to targetX) {
+                                painter.moveTo(
+                                    x = targetX,
+                                    y = targetY,
+                                )
+                                lastPoint = targetX to targetX
+                            }
+                        },
+                        onDragCancel = { lastPoint = null },
+                        onDragEnd = { lastPoint = null },
+                    )
+                },
             contentAlignment = Alignment.TopStart,
         ) {
-            // TODO: 터치, 위치 조정
+            // TODO: 위치 조정
 
             val blockWidth = maxWidth / 25
             val blockHeight = maxHeight / 25
@@ -287,7 +344,7 @@ fun BoxScope.DrawScreen(
                         text = when (pixel.type) {
                             Pixel.PixelType.STAR -> "⭐️"
                             Pixel.PixelType.EYE -> "👀"
-                            Pixel.PixelType.FACE -> "😀"
+                            Pixel.PixelType.MAN -> "😀"
                             Pixel.PixelType.FIRE -> "🔥"
                         },
                         style = LocalTextStyle.current.copy(
@@ -392,7 +449,7 @@ fun BoxScope.DrawScreen(
                     drawing.draw(
                         x = painter.x,
                         y = painter.y,
-                        type = Pixel.PixelType.FACE,
+                        type = Pixel.PixelType.MAN,
                     )
                 } else if (webKeyEvent.isPressed(WebKey.DIGIT_4)) {
                     drawing.draw(
@@ -487,7 +544,7 @@ fun BoxScope.DrawScreen(
                     drawing.draw(
                         x = painter.x,
                         y = painter.y,
-                        type = Pixel.PixelType.FACE
+                        type = Pixel.PixelType.MAN
                     )
                 },
             ) {

@@ -40,6 +40,10 @@ fun serializeHash(
             if (screen.destination != null)
                 screenMapQuery["destination"] = screen.destination
         }
+        is Screen.Draw -> {
+            screenMapQuery["painterValue"] = screen.painterValue
+            screenMapQuery["drawingValue"] = screen.drawingValue
+        }
         is Screen.NotFound -> {
             screenMapQuery["route"] = screen.route
         }
