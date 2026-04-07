@@ -28,6 +28,7 @@ import io.github.jtaeyeon05.why_web.data.Avatar
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 import io.github.jtaeyeon05.why_web.ui.foundation.WebKey
+import kotlin.math.ceil
 
 
 @Composable
@@ -35,7 +36,7 @@ fun MessageBox(
     modifier: Modifier = Modifier,
     message: String,
     avatar: Avatar? = null,
-    line: Int = LocalLayoutConstraints.current.box.defaultMessageLine,
+    line: Float = LocalLayoutConstraints.current.box.defaultMessageLine,
     onReplay: (() -> Unit)? = null,
 ) {
     val keyboardManager = LocalKeyboardEventManager.current
@@ -107,7 +108,7 @@ fun MessageBox(
                     }
                 }
             }
-            val messageLine = if (avatar == null) line else line - 1
+            val messageLine = if (avatar == null) line else line - 1f
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -115,7 +116,7 @@ fun MessageBox(
                 text = message,
                 fontSize = typography.medium.sp,
                 lineHeight = typography.medium.lineSp,
-                maxLines = messageLine,
+                maxLines = ceil(messageLine).toInt(),
             )
         }
     }

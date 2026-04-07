@@ -31,12 +31,12 @@ class LayoutConstraints private constructor(
         val mediumBox: Dp,
         val largeBox: Dp,
         val buttonHeight: Dp,
-        val defaultSelectionLine: Int,
+        val defaultSelectionLine: Float,
         val selectionBoxWidth: WidthRange,
-        val selectionBoxHeight: (Int?) -> Dp,
-        val defaultMessageLine: Int,
+        val selectionBoxHeight: (Float?) -> Dp,
+        val defaultMessageLine: Float,
         val messageBoxWidth: Dp,
-        val messageBoxHeight: (Int?) -> Dp,
+        val messageBoxHeight: (Float?) -> Dp,
     )
 
     data class InsetSize(
@@ -110,8 +110,8 @@ class LayoutConstraints private constructor(
 
             val box = run {
                 val buttonHeight = typography.medium.lineDp + padding.small * 2
-                val defaultSelectionLine = 2
-                val defaultMessageLine = 4
+                val defaultSelectionLine = 2f
+                val defaultMessageLine = 4f
 
                 BoxSize(
                     smallBox = base * 0.04f,
@@ -124,13 +124,13 @@ class LayoutConstraints private constructor(
                         max = base - padding.large * 2,
                     ),
                     selectionBoxHeight = { line ->
-                        val line = if (line == null || line !in 1 .. 10) defaultSelectionLine else line
+                        val line = if (line == null || line !in 1f .. 10f) defaultSelectionLine else line
                         buttonHeight * line + padding.medium * 2 + inset.borderWidth * 2
                     },
                     defaultMessageLine = defaultMessageLine,
                     messageBoxWidth = base,
                     messageBoxHeight = { line ->
-                        val line = if (line == null || line !in 0 .. 10) defaultMessageLine else line
+                        val line = if (line == null || line !in 1f .. 10f) defaultMessageLine else line
                         typography.medium.lineDp * line + padding.medium * 2 + inset.borderWidth * 2
                     },
                 )

@@ -45,7 +45,7 @@ fun SelectionBox(
 fun SelectionBox(
     modifier: Modifier = Modifier,
     scrollTo: Float = 0f,  // 변경시 해당 버튼으로 스크롤 이동
-    line: Int = LocalLayoutConstraints.current.box.defaultSelectionLine,  // 한 번에 보이는 버튼 개수
+    line: Float = LocalLayoutConstraints.current.box.defaultSelectionLine.toFloat(),  // 한 번에 보이는 버튼 개수
     content: @Composable ColumnScope.() -> Unit,
 ) {
     LocalLayoutConstraints.current.run {

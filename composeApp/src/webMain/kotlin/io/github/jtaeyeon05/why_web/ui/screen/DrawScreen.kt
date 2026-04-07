@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -270,7 +271,7 @@ fun BoxScope.DrawScreen(
 
         BoxWithConstraints(
             modifier = Modifier
-                .padding(bottom = box.messageBoxHeight(2))
+                .padding(bottom = box.messageBoxHeight(2f))
                 .fillMaxSize()
                 .pointerInput(Unit) {
                     detectTapGestures(
@@ -299,7 +300,7 @@ fun BoxScope.DrawScreen(
                             val targetX = (touchPoint.x / blockWidth).toInt()
                             val targetY = (touchPoint.y / blockHeight).toInt()
 
-                            if (lastPoint != targetX to targetX) {
+                            if (lastPoint != targetX to targetY) {
                                 painter.moveTo(
                                     x = targetX,
                                     y = targetY,
@@ -315,8 +316,8 @@ fun BoxScope.DrawScreen(
         ) {
             // TODO: 위치 조정
 
-            val blockWidth = maxWidth / 25
-            val blockHeight = maxHeight / 25
+            val blockWidth = (maxWidth - box.mediumBox) / (drawing.drawingSize - 1)
+            val blockHeight = (maxHeight - box.mediumBox) / (drawing.drawingSize - 1)
 
             // Drawing
             drawing.pixelList.forEach { pixel ->
@@ -393,7 +394,7 @@ fun BoxScope.DrawScreen(
                 avatar = viewModel.model.value.avatar,
                 name = viewModel.model.value.name,
             ),
-            line = 2,
+            line = 2f,
             onReplay = { textsKey += 1 },
         )
 
@@ -464,19 +465,27 @@ fun BoxScope.DrawScreen(
         SelectionBox(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(bottom = box.messageBoxHeight(2) + padding.medium)
+                .padding(bottom = box.messageBoxHeight(2f) + padding.medium)
                 .pointerInput(Unit) {},
+            line = if (this.screen.height - box.messageBoxHeight(2f) > 18f * box.buttonHeight) 9f else 4.5f,
         ) {
-            Text(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(padding.small),
-                text = "←↑→↓ 혹은 터치로 포인터를 조절하고\n" +
-                        "다음 버튼을 눌러 그림을 그릴 수 있습니다.",
-                fontSize = typography.small.sp,
-                textAlign = TextAlign.Start,
-                lineHeight = typography.small.lineSp,
-            )
+                    .height(box.buttonHeight)
+                    .padding(padding.small)
+            ) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterStart),
+                    text = "←↑→↓ 혹은 터치로 포인터를 조절하고\n" +
+                            "다음 버튼을 눌러 그림을 그릴 수 있습니다.",
+                    fontSize = typography.small.sp,
+                    textAlign = TextAlign.Start,
+                    lineHeight = typography.small.lineSp,
+                )
+            }
             ClassicButton(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {

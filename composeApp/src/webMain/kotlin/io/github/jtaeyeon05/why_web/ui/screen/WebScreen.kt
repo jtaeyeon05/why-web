@@ -92,12 +92,12 @@ fun BoxScope.WebScreen(
                 avatar = viewModel.model.value.avatar,
                 name = viewModel.model.value.name,
             ),
-            line = 2,
+            line = 2f,
         )
 
         // WebView
         val webWidth = screen.base - 2 * padding.large
-        val webHeight = screen.height - 2 * box.messageBoxHeight(2) - 2 * padding.large
+        val webHeight = screen.height - 2 * box.messageBoxHeight(2f) - 2 * padding.large
 
         val webState = rememberWebViewState(url = BrowserWindow.location.origin + "/?iframe_seed=${Random.nextInt()}")
         val webController = rememberWebViewController()

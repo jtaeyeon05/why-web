@@ -121,7 +121,7 @@ fun BoxScope.EasterEgg2Screen(
 
             // WebView
             val (webWidth, webHeight) = run {
-                val webHeightMax = screen.height - 2 * box.selectionBoxHeight(2) - 2 * padding.large
+                val webHeightMax = screen.height - 2 * box.selectionBoxHeight(2f) - 2 * padding.large
 
                 var webWidth = screen.base - 2 * padding.large
                 var webHeight = webWidth * 3.0f / 4.0f
@@ -219,7 +219,7 @@ fun BoxScope.EasterEgg2Screen(
             SelectionBox(
                 modifier = Modifier.align(Alignment.BottomCenter),
                 scrollTo = selectionScrollTo,
-                line = 2,
+                line = 2f,
             ) {
                 ClassicButton(
                     modifier = Modifier.fillMaxWidth(),

@@ -74,7 +74,7 @@ fun BoxScope.StartScreen(
                 .align(Alignment.BottomCenter)
                 .padding(bottom = box.messageBoxHeight(box.defaultMessageLine) + padding.medium),
             scrollTo = selectionScrollTo,
-            line = 2,
+            line = 2f,
         ) {
             ClassicButton(
                 modifier = Modifier.fillMaxWidth(),
