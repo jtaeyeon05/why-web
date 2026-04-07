@@ -73,9 +73,7 @@ fun BoxScope.BornScreen(
             ClassicButton(
                 modifier = Modifier.fillMaxWidth(),
                 focused = selection == 1,
-                onClick = {
-                    // TODO
-                },
+                onClick = { navController.navigate(Screen.Draw()) },
                 onFocused = { selection = 1 },
             ) {
                 Text("벽에 낙서하기")

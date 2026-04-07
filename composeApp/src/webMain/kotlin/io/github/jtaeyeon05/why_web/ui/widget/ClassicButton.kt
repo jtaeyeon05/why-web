@@ -28,7 +28,7 @@ import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
 @Composable
 fun ClassicButton(
     modifier: Modifier = Modifier,
-    focused: Boolean,
+    focused: Boolean = false,
     onClick: () -> Unit,
     onFocused: (() -> Unit)? = null,
     content: @Composable BoxScope.() -> Unit,

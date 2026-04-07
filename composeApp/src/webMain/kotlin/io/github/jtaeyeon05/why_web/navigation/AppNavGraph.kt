@@ -8,6 +8,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import io.github.jtaeyeon05.why_web.ui.screen.BornScreen
+import io.github.jtaeyeon05.why_web.ui.screen.DrawScreen
 import io.github.jtaeyeon05.why_web.ui.screen.EarthScreen
 import io.github.jtaeyeon05.why_web.ui.screen.EasterEgg1Screen
 import io.github.jtaeyeon05.why_web.ui.screen.EasterEgg2Screen
@@ -76,6 +77,15 @@ fun NavGraphBuilder.appNavGraph(
             WebScreen(
                 navController = navController,
                 viewModel = viewModel,
+            )
+        }
+    }
+    composable<Screen.Draw> { backStackEntry ->
+        Box(modifier = Modifier.fillMaxSize()) {
+            DrawScreen(
+                navController = navController,
+                viewModel = viewModel,
+                screen = backStackEntry.toRoute<Screen.Draw>(),
             )
         }
     }

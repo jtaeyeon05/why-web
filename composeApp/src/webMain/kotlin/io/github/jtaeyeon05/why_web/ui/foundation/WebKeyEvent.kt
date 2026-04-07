@@ -31,6 +31,7 @@ enum class WebKey(val value: String) {
     DIGIT_0("Digit0"), DIGIT_1("Digit1"), DIGIT_2("Digit2"), DIGIT_3("Digit3"), DIGIT_4("Digit4"), DIGIT_5("Digit5"), DIGIT_6("Digit6"), DIGIT_7("Digit7"), DIGIT_8("Digit8"), DIGIT_9("Digit9"),
     NUMPAD_0("Numpad0"), NUMPAD_1("Numpad1"), NUMPAD_2("Numpad2"), NUMPAD_3("Numpad3"), NUMPAD_4("Numpad4"), NUMPAD_5("Numpad5"), NUMPAD_6("Numpad6"), NUMPAD_7("Numpad7"), NUMPAD_8("Numpad8"), NUMPAD_9("Numpad9"),
     KEY_A("KeyA"), KEY_B("KeyB"), KEY_C("KeyC"), KEY_D("KeyD"), KEY_E("KeyE"), KEY_F("KeyF"), KEY_G("KeyG"), KEY_H("KeyH"), KEY_I("KeyI"), KEY_J("KeyJ"), KEY_K("KeyK"), KEY_L("KeyL"), KEY_M("KeyM"), KEY_N("KeyN"), KEY_O("KeyO"), KEY_P("KeyP"), KEY_Q("KeyQ"), KEY_R("KeyR"), KEY_S("KeyS"), KEY_T("KeyT"), KEY_U("KeyU"), KEY_V("KeyV"), KEY_W("KeyW"), KEY_X("KeyX"), KEY_Y("KeyY"), KEY_Z("KeyZ"),
+    SLASH("Slash"), SEMICOLON("Semicolon"), PERIOD("Period"), COMMA("Comma"), QUOTE("Quote"), BACKSLASH("Backslash"), BACKQUOTE("Backquote"), BRACKET_LEFT("BracketLeft"), BRACKET_RIGHT("BracketRight"), MINUS("Minus"), EQUAL("Equal"),
 
     ARROW_UP("ArrowUp"), ARROW_DOWN("ArrowDown"), ARROW_LEFT("ArrowLeft"), ARROW_RIGHT("ArrowRight"),
     BACKSPACE("Backspace"), TAB("Tab"), ENTER("Enter"), ESCAPE("Escape"), SPACE("Space"),

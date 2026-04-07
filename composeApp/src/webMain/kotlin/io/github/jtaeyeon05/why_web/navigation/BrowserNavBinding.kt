@@ -10,6 +10,7 @@ import io.github.jtaeyeon05.why_web.util.URLSearchParams
 import io.github.jtaeyeon05.why_web.util.buildQuery
 import io.github.jtaeyeon05.why_web.viewmodel.AppModel
 import kotlin.collections.plus
+import kotlin.js.ExperimentalWasmJsInterop
 
 
 fun parseHash(): Pair<AppModel, Screen> {
@@ -51,6 +52,7 @@ fun serializeHash(
     )
 }
 
+@OptIn(ExperimentalWasmJsInterop::class)
 fun refreshHash(
     model: AppModel,
     screen: Screen,
@@ -82,6 +84,7 @@ suspend fun NavController.bindBrowserHash(
                 destination.hasRoute<Screen.Earth>() -> entry.toRoute<Screen.Earth>()
                 destination.hasRoute<Screen.Born>() -> Screen.Born
                 destination.hasRoute<Screen.Web>() -> Screen.Web
+                destination.hasRoute<Screen.Draw>() -> entry.toRoute<Screen.Draw>()
                 destination.hasRoute<Screen.NotToBeBorn>() -> Screen.NotToBeBorn
                 destination.hasRoute<Screen.EasterEgg1>() -> Screen.EasterEgg1
                 destination.hasRoute<Screen.EasterEgg2>() -> Screen.EasterEgg2
