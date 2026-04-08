@@ -1,64 +1,54 @@
-# macOS
-Thumbs.db
+# OS
 .DS_Store
 .AppleDouble
 .LSOverride
+Thumbs.db
 *.log
 *.tmp
 
 # VSCode
 .vscode/
 .history/
-misc.xml
-deploymentTargetDropDown.xml
-render.experimental.xml
-.history
 .ionide
 *.code-workspace
 *.vsix
 
-# IntelliJ
-captures/
-build/
-out/
-.cxx/
-.externalNativeBuild/
+# IntelliJ / Android Studio
 .idea/
 .idea_modules/
-.gradle/
-.navigation/
-local.properties
-output.json
-!gradle/wrapper/gradle-wrapper.jar
+out/
+captures/
+misc.xml
+deploymentTargetDropDown.xml
+render.experimental.xml
 *.iml
 *.ipr
 *.iws
-*.apk
 
-# Code
-.kotlin
-.gradle
-.externalNativeBuild
-captures
-.idea_modules/
+# Xcode
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
+!*.xcworkspace/contents.xcworkspacedata
+**/xcshareddata/WorkspaceSettings.xcsettings
+
+# Java / Kotlin / Gradle
 .gradle/
-.navigation/
-local.properties
-output.json
-!gradle/wrapper/gradle-wrapper.jar
-*.iml
-*.ipr
-*.iws
-*.apk
-
-# Code
-.kotlin
-.gradle
-.externalNativeBuild
-captures
+.kotlin/
+build/
 **/build/
-xcuserdata
-**/build/
-xcuserdata
 !src/**/build/
+local.properties
+output.json
+!gradle/wrapper/gradle-wrapper.jar
+
+# Node.js
 node_modules/
+
+# ETC
+.cxx/
+.externalNativeBuild/
+.navigation/
+*.apk
+xcuserdata

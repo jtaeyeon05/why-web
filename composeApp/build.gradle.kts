@@ -18,10 +18,8 @@ val buildInfoDir = layout.buildDirectory.dir("generated/sources/buildInfo/kotlin
 abstract class GenerateBuildInfoTask : DefaultTask() {
     @get:Input
     abstract val versionProp: Property<String>
-
     @get:Input
     abstract val pkgProp: Property<String>
-
     @get:OutputDirectory
     abstract val outDir: DirectoryProperty
 
