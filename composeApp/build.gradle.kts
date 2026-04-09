@@ -90,7 +90,7 @@ kotlin {
         }
     }
 
-    rootProject.tasks.named("prepareKotlinBuildScriptModel") {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask<*>>().configureEach {
         dependsOn(generateBuildInfo)
     }
 }
