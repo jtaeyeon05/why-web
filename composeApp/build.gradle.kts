@@ -43,7 +43,6 @@ abstract class GenerateBuildInfoTask : DefaultTask() {
             
             """.trimIndent()
         )
-        print(">> Generated BuildInfo.kt at: ${file.absolutePath}")
     }
 }
 
@@ -90,7 +89,8 @@ kotlin {
         }
     }
 
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask<*>>().configureEach {
+    val syncTaskNames = setOf("prepareKotlinBuildScriptModel", "prepareKotlinIdeaImport")
+    tasks.matching { it.name in syncTaskNames }.all {
         dependsOn(generateBuildInfo)
     }
 }
