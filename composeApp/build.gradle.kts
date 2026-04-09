@@ -11,6 +11,7 @@ plugins {
 }
 
 val version = "1.0.0B"
+val buildNumber = LocalDateTime.now(ZoneId.of("Asia/Seoul")).format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))!!
 val buildInfoPackage = "io.github.jtaeyeon05.why_web.buildinfo"
 val buildInfoDir = layout.buildDirectory.dir("generated/sources/buildInfo/kotlin")
 
@@ -19,38 +20,39 @@ abstract class GenerateBuildInfoTask : DefaultTask() {
     @get:Input
     abstract val versionProp: Property<String>
     @get:Input
-    abstract val pkgProp: Property<String>
+    abstract val buildNumberProp: Property<String>
+    @get:Input
+    abstract val packageProp: Property<String>
     @get:OutputDirectory
     abstract val outDir: DirectoryProperty
 
     @TaskAction
     fun generate() {
-        val buildNumber = LocalDateTime.now(ZoneId.of("Asia/Seoul")).format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
         val out = outDir.get().asFile
-        val pkgPath = pkgProp.get().replace('.', '/')
-        val file = File(out, "$pkgPath/BuildInfo.kt")
+        val packagePath = packageProp.get().replace('.', '/')
+        val file = File(out, "$packagePath/BuildInfo.kt")
         file.parentFile.mkdirs()
         file.writeText(
             """
-            package ${pkgProp.get()}
+            package ${packageProp.get()}
             
             object BuildInfo {
                 const val VERSION = "${versionProp.get()}"
-                const val BUILD_NUMBER  = "$buildNumber"
+                const val BUILD_NUMBER  = "${buildNumberProp.get()}"
             }
+            
             """.trimIndent()
         )
-        println("Generated BuildInfo.kt at: ${file.absolutePath}")
+        print(">> Generated BuildInfo.kt at: ${file.absolutePath}")
     }
 }
 
 val generateBuildInfo by tasks.register<GenerateBuildInfoTask>("generateBuildInfo") {
     versionProp.set(version)
-    pkgProp.set(buildInfoPackage)
+    buildNumberProp.set(buildNumber)
+    packageProp.set(buildInfoPackage)
     outDir.set(buildInfoDir)
 }
-
-kotlin.sourceSets.getByName("commonMain").kotlin.srcDir(buildInfoDir)
 
 kotlin {
     js {
@@ -65,6 +67,9 @@ kotlin {
     }
 
     sourceSets {
+        commonMain {
+            kotlin.srcDir(buildInfoDir)
+        }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
@@ -85,9 +90,7 @@ kotlin {
         }
     }
 
-    targets.all {
-        compilations.all {
-            compileTaskProvider.configure { dependsOn(generateBuildInfo) }
-        }
+    rootProject.tasks.named("prepareKotlinBuildScriptModel") {
+        dependsOn(generateBuildInfo)
     }
 }
