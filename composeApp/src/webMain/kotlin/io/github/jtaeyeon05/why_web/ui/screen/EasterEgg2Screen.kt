@@ -101,6 +101,7 @@ fun BoxScope.EasterEgg2Screen(
                 val emojiGroup = remember { emojiGroups.random() }
                 repeat(50) {
                     BouncingEmoji(
+                        modifier = Modifier.fillMaxSize(),
                         emoji = remember { emojiGroup.random() },
                         initialDirection = remember {
                             Random.nextGaussian(

@@ -33,6 +33,7 @@ import kotlin.random.Random
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BoxScope.BouncingEmoji(
+    modifier: Modifier = Modifier.fillMaxSize(),
     emoji: String,
     emojiSize: Dp = LocalLayoutConstraints.current.typography.large.dp,
     alignment: Alignment = Alignment.Center,
@@ -40,10 +41,11 @@ fun BoxScope.BouncingEmoji(
     initialMagnitude: Dp = with(LocalLayoutConstraints.current) { remember { screen.base * (0.015f + 0.015f * Random.nextFloat()) } },
     accelDirection: Float = remember { 2f * PI.toFloat() * Random.nextFloat() },
     accelMagnitude: Dp = with(LocalLayoutConstraints.current) { remember { screen.base * (0.00015f + 0.00015f * Random.nextFloat()) } },
+    isDragEnabled: Boolean = true,
     ticksPerSecond: Long = 60L,
 ) {
     LocalLayoutConstraints.current.run {
-        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+        BoxWithConstraints(modifier = modifier) {
             var velocityX by remember(maxWidth, maxHeight, screen.base, emojiSize, alignment, initialDirection, initialMagnitude) { mutableStateOf(cos(initialDirection) * initialMagnitude) }
             var velocityY by remember(maxWidth, maxHeight, screen.base, emojiSize, alignment, initialDirection, initialMagnitude) { mutableStateOf(sin(initialDirection) * initialMagnitude) }
 
@@ -98,7 +100,7 @@ fun BoxScope.BouncingEmoji(
             }
 
             LaunchedEffect(isAlive, isDragging) {
-                while (isAlive && !isDragging) {
+                while (isAlive && (!isDragging || !isDragEnabled)) {
                     velocityX += cos(accelDirection) * accelMagnitude
                     velocityY += sin(accelDirection) * accelMagnitude
                     offsetX += velocityX
@@ -115,21 +117,27 @@ fun BoxScope.BouncingEmoji(
                         .size(emojiSize)
                         .align(alignment)
                         .offset(x = offsetX, y = offsetY)
-                        .onDrag(
-                            onDragStart = {
-                                velocityX = 0.dp
-                                velocityY = 0.dp
-                                isDragging = true
-                            },
-                            onDragCancel = { isDragging = false },
-                            onDragEnd = { isDragging = false },
-                            onDrag = {
-                                with(density) {
-                                    offsetX += it.x.toDp()
-                                    offsetY += it.y.toDp()
-                                }
-                            },
-                        ),
+                        .let {
+                            if (isDragEnabled) {
+                                it.onDrag(
+                                    onDragStart = {
+                                        velocityX = 0.dp
+                                        velocityY = 0.dp
+                                        isDragging = true
+                                    },
+                                    onDragCancel = { isDragging = false },
+                                    onDragEnd = { isDragging = false },
+                                    onDrag = {
+                                        with(density) {
+                                            offsetX += it.x.toDp()
+                                            offsetY += it.y.toDp()
+                                        }
+                                    },
+                                )
+                            } else {
+                                it
+                            }
+                        },
                     text = emoji,
                     fontSize = with(density) { emojiSize.toSp() },
                     lineHeight = with(density) { emojiSize.toSp() },
