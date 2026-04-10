@@ -84,7 +84,7 @@ fun BoxScope.EasterEgg1Screen(
         var bouncingEmojiKey by rememberSaveable { mutableStateOf(0) }
         LaunchedEffect(Unit) {
             while (true) {
-                delay(2000)
+                delay(2500)
                 bouncingEmojiKey++
             }
         }
@@ -92,48 +92,64 @@ fun BoxScope.EasterEgg1Screen(
         key(bouncingEmojiKey) {
             val emojiGroup = remember { emojiGroups.random() }
             repeat(50) {
+                val bottomAlignment = remember { listOf(Alignment.BottomStart, Alignment.BottomEnd).random() }
+                val bottomInitialDirection = remember {
+                    if (bottomAlignment == Alignment.BottomStart) {
+                        Random.nextGaussian(
+                            mean = 0.35 * PI,
+                            stdDev = 0.75,
+                            min = 0.2 * PI,
+                            max = 0.5 * PI
+                        ).toFloat()
+                    } else {
+                        Random.nextGaussian(
+                            mean = 0.65 * PI,
+                            stdDev = 0.75,
+                            min = 0.5 * PI,
+                            max = 0.8 * PI
+                        ).toFloat()
+                    }
+                }
                 BouncingEmoji(
                     modifier = Modifier.fillMaxSize(),
                     emoji = remember { emojiGroup.random() },
-                    alignment = Alignment.BottomCenter,
-                    initialDirection = remember {
-                        Random.nextGaussian(
-                            mean = 0.5 * PI,
-                            stdDev = 0.75,
-                            min = 0.2 * PI,
-                            max = 0.8 * PI
-                        ).toFloat()
-                    },
-                    initialMagnitude = remember {
-                        screen.base * (0.005f + 0.020f * Random.nextFloat())
-                    },
+                    alignment = bottomAlignment,
+                    initialDirection = bottomInitialDirection,
+                    initialMagnitude = remember { screen.base * (0.005f + 0.025f * Random.nextFloat()) },
                     accelDirection = 1.5f * PI.toFloat(),
                     accelMagnitude = screen.base * 0.0003f,
                     isDragEnabled = false,
                 ) // 위 -> 아래
+                val topAlignment = remember { listOf(Alignment.TopStart, Alignment.TopEnd).random() }
+                val topInitialDirection = remember {
+                    if (topAlignment == Alignment.TopStart) {
+                        Random.nextGaussian(
+                            mean = 1.65 * PI,
+                            stdDev = 0.75,
+                            min = 1.5 * PI,
+                            max = 1.8 * PI
+                        ).toFloat()
+                    } else {
+                        Random.nextGaussian(
+                            mean = 1.35 * PI,
+                            stdDev = 0.75,
+                            min = 1.2 * PI,
+                            max = 1.5 * PI
+                        ).toFloat()
+                    }
+                }
                 BouncingEmoji(
                     modifier = Modifier.fillMaxSize(),
                     emoji = remember { emojiGroup.random() },
-                    alignment = Alignment.TopCenter,
-                    initialDirection = remember {
-                        Random.nextGaussian(
-                            mean = 1.5 * PI,
-                            stdDev = 0.75,
-                            min = 1.2 * PI,
-                            max = 1.8 * PI
-                        ).toFloat()
-                    },
-                    initialMagnitude = remember {
-                        screen.base * (0.005f + 0.020f * Random.nextFloat())
-                    },
+                    alignment = topAlignment,
+                    initialDirection = topInitialDirection,
+                    initialMagnitude = remember { screen.base * (0.005f + 0.025f * Random.nextFloat()) },
                     accelDirection = 0.5f * PI.toFloat(),
                     accelMagnitude = screen.base * 0.0003f,
                     isDragEnabled = false,
                 ) // 아래 -> 위
             }
         }
-
-        // TODO
 
         // Close
         val canBack by derivedStateOf { navController.previousBackStackEntry != null }

@@ -10,7 +10,7 @@ plugins {
     kotlin("plugin.serialization") version "2.3.0"
 }
 
-val version = "1.0.1B"
+val version = "1.0.0"
 val buildNumber = LocalDateTime.now(ZoneId.of("Asia/Seoul")).format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))!!
 val buildInfoPackage = "io.github.jtaeyeon05.why_web.buildinfo"
 val buildInfoDir = layout.buildDirectory.dir("generated/sources/buildInfo/kotlin")
