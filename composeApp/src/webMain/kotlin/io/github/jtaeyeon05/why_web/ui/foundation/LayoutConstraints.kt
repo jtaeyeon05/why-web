@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import androidx.compose.ui.unit.times
 
 
 class LayoutConstraints private constructor(
@@ -155,7 +156,7 @@ data class WidthRange(
     override val endInclusive: Dp get() = max
 }
 
-class TextSize(
+data class TextSize(
     val size: Dp,
     val lineHeight: Float,
     private val density: Density,
@@ -165,6 +166,41 @@ class TextSize(
 
     val lineDp: Dp get() = size * lineHeight
     val lineSp: TextUnit get() = with(density) { lineDp.toSp() }
+
+    operator fun unaryPlus() = this
+    operator fun unaryMinus() = this * -1f
+
+    operator fun plus(other: TextSize) = TextSize(
+        size = this.size + other.size,
+        lineHeight = 0.5f * (this.lineHeight + other.lineHeight),
+        density = this.density,
+    )
+
+    operator fun minus(other: TextSize) = TextSize(
+        size = this.size - other.size,
+        lineHeight = 0.5f * (this.lineHeight + other.lineHeight),
+        density = this.density,
+    )
+
+    operator fun times(scale: Number) = TextSize(
+        size = this.size * scale.toFloat(),
+        lineHeight = this.lineHeight,
+        density = this.density,
+    )
+
+    operator fun div(scale: Number) = TextSize(
+        size = this.size / scale.toFloat(),
+        lineHeight = this.lineHeight,
+        density = this.density,
+    )
+
+    companion object {
+        operator fun Number.times(textSize: TextSize) = TextSize(
+            size = this.toFloat() * textSize.size,
+            lineHeight = textSize.lineHeight,
+            density = textSize.density,
+        )
+    }
 }
 
 @Composable

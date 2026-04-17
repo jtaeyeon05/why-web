@@ -250,7 +250,6 @@ fun BoxScope.DrawScreen(
             painter.x, painter.y,
             painter.isPencilMode, painter.isEraserMode
         ) {
-            updateHash()
             if (painter.isPencilMode) {
                 drawing.draw(
                     x = painter.x,
@@ -305,7 +304,7 @@ fun BoxScope.DrawScreen(
                                     x = targetX,
                                     y = targetY,
                                 )
-                                lastPoint = targetX to targetX
+                                lastPoint = targetX to targetY
                             }
                         },
                         onDragCancel = { lastPoint = null },
@@ -314,8 +313,6 @@ fun BoxScope.DrawScreen(
                 },
             contentAlignment = Alignment.TopStart,
         ) {
-            // TODO: 위치 조정
-
             val blockWidth = (maxWidth - box.mediumBox) / (drawing.drawingSize - 1)
             val blockHeight = (maxHeight - box.mediumBox) / (drawing.drawingSize - 1)
 

@@ -19,11 +19,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.times
 import androidx.navigation.NavController
 import io.github.jtaeyeon05.why_web.data.Avatar
 import io.github.jtaeyeon05.why_web.navigation.Screen
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalKeyboardEventManager
 import io.github.jtaeyeon05.why_web.ui.foundation.LocalLayoutConstraints
+import io.github.jtaeyeon05.why_web.ui.foundation.TextSize.Companion.times
 import io.github.jtaeyeon05.why_web.ui.foundation.rememberAnimatedText
 import io.github.jtaeyeon05.why_web.ui.widget.ClassicButton
 import io.github.jtaeyeon05.why_web.ui.widget.MessageBox
@@ -32,6 +34,7 @@ import io.github.jtaeyeon05.why_web.util.specialCharacters
 import io.github.jtaeyeon05.why_web.viewmodel.AppViewModel
 import kotlinx.coroutines.delay
 import kotlin.random.Random
+import kotlin.time.Duration.Companion.milliseconds
 
 
 @Composable
@@ -101,10 +104,12 @@ fun BoxScope.ToBeBorn1Screen(
         }
 
         // EasterEgg2
+        val easterEgg2TextSize = 0.5f * (typography.medium + typography.large)
+
         Box(
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .size(box.buttonHeight)
+                .size(easterEgg2TextSize.lineDp + 2 * padding.small)
                 .pointerInput(Unit) {
                     detectTapGestures (
                         onTap = {
@@ -119,15 +124,15 @@ fun BoxScope.ToBeBorn1Screen(
             LaunchedEffect(Unit) {
                 while (true) {
                     easterEgg = specialCharacters.random()
-                    delay(Random.nextLong(50, 150))
+                    delay(Random.nextLong(50, 150).milliseconds)
                 }
             }
 
             Text(
                 text = easterEgg,
-                color = LocalContentColor.current.copy(alpha = 0.25f),
-                fontSize = typography.medium.sp,
-                lineHeight = typography.medium.lineSp,
+                color = LocalContentColor.current.copy(alpha = 0.50f),
+                fontSize = easterEgg2TextSize.sp,
+                lineHeight = easterEgg2TextSize.lineSp,
             )
         }
     }
