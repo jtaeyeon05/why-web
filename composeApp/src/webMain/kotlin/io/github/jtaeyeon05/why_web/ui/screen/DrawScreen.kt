@@ -250,6 +250,7 @@ fun BoxScope.DrawScreen(
             painter.x, painter.y,
             painter.isPencilMode, painter.isEraserMode
         ) {
+            updateHash()
             if (painter.isPencilMode) {
                 drawing.draw(
                     x = painter.x,
